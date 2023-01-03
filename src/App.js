@@ -1,14 +1,16 @@
-import logo from './logo.svg';
 import './style/App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Feed from './components/Feed';
+import Login from './components/Login';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-          LINKR
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Login />} />
+        <Route path='/feed' element={<Feed />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
