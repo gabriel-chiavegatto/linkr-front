@@ -1,22 +1,43 @@
+import { useEffect } from "react";
 import React from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import useLocalStorage from "../../hooks/useLocalStorage";
 import useForm from "../../hooks/useForm";
 import Button from "../form/Button";
 import Form from "../form/Form";
 import Input from "../form/Input";
 
-function BannerForm() {
+function BannerForm() {	
   const email = useForm('email')
   const password = useForm('password')
   const [activeButton, setActiveButton] = React.useState(true);
 
-  function request(){
-    setActiveButton(false)
-    setTimeout(() => {
-      setActiveButton(true)
-    }, 3000)
-  }
+  const [storage, setStorage] = useLocalStorage("session_token", "");
+  console.log(storage);
+
+  	useEffect(()=>{}, [])
+	function request(){ 
+		
+		const req = { 
+			email: email.value, 
+			password: password.value 
+		}; 		
+
+		const whenPromised = (response) => {
+			setStorage(response.data);
+		};
+
+		axios
+			.post("http://localhost:5000/sign-in", req)
+			.then(res => whenPromised(res))
+			.catch(err => console.error(err));
+		setActiveButton(false)
+		setTimeout(() => {
+			setActiveButton(true)
+		}, 3000)
+	}
 
   return (
     <Banner>
@@ -25,7 +46,7 @@ function BannerForm() {
         <Input placeholder={"Password"} {...password}/>
         <Button request={request} activeButton={activeButton}>Log In</Button>
       </Form>
-      <Link to={"/feed"}>
+      <Link to={"/sign-up"}>
         <RedirectPage>First time? Create an account!</RedirectPage>
       </Link>
     </Banner>
