@@ -1,6 +1,6 @@
 import picture from '../assets/lula.jpg';
 import styled from 'styled-components';
-import arrow from '../assets/arrow.png'
+import arrow from '../assets/arrow.svg'
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Logo from './Logo';
@@ -11,7 +11,7 @@ export default function Header() {
 
     const navigate = useNavigate();
     const [logOutBar, setLogoutBar] = useState('none');
-    const [arrowDirection, setArrowDirection] = useState('rotate(0deg)')
+    const [arrowDirection, setArrowDirection] = useState('rotate(270deg)')
     const [search, setSearch] = useState("");
 
     function toggleLogoutBar() {
@@ -28,12 +28,18 @@ export default function Header() {
         const api = process.env.API || 'http://localhost:5000'
         useEffect(() => {
             try {
-                axios.post(`${api}/logout`);
-                // forget data context
+                const token = window.localStorage.getItem('key')
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+                axios.post(`${api}/logout`, {}, config);
+                window.localStorage.clear();
                 navigate('/')
             } catch (error) {
                 console.log("AXIOS ERROR")
-                // forget data context
+                window.localStorage.clear();
                 navigate('/')
             }
         })
@@ -79,6 +85,7 @@ const Menu = styled.div`
         width: 18.37px;
         margin: 0 17px;
         transform: ${props => props.arrowDirection};
+        transform-origin: center;
     }
     .user-picture{
         width: 53px;
@@ -96,6 +103,7 @@ const LogoutAside = styled.aside`
     height: 47px;
     background: #171717;
     border-radius: 0px 0px 0px 20px;
+    z-index: 9;
     p{
         width: 100%;
         height: 100%;
