@@ -2,9 +2,41 @@ import React from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
 import Title from "../components/Title";
-import picture from '../logo.svg'
+import useRequest from "../hooks/useRequest";
+import picture from "../logo.svg";
 
 function HomePage() {
+  const [link, setLink] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const { error, loading, value, request, setError } = useRequest();
+  console.log('Value: ', value)
+  console.log('Error: ', error)
+  const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ildlc2xleUQiLCJwaWN0dXJlX3VybCI6Ind3dy5taW5oYWZvdG8uY29tIiwiaWF0IjoxNjcyODU4NjAzLCJleHAiOjE2NzU0NTA2MDN9.7D2ZZkFzy17qAGCjQmzVpEJZFoSNJX81zGhg474Sups";
+  const headers = { authorization: "Bearer " + token };
+
+  if(error){
+    alert('Houve um erro ao publicar seu link, tente novamente!')
+    setError(null)
+  }
+
+  async function publishPost(){
+    if(link.length === 0){
+      alert('Por favor, preencha o link corretamente!')
+      return;
+    }
+      await request(
+        "/post",
+        "post",
+        {  link, description },
+        { headers }
+      )
+      if(!error){
+        setDescription('')
+        setLink('')
+      }
+  }
+
   return (
     <ContainerHome>
       <Header />
@@ -14,22 +46,33 @@ function HomePage() {
           <Posts>
             <ContainerPublish>
               <ContainerUserPhoto>
-                <img src={picture}/>
+                <img src={picture} />
               </ContainerUserPhoto>
               <Publish>
                 <MessagePublish>
                   What are you going to share today?
                 </MessagePublish>
                 <InputPublish
+                  disabled={loading}
+                  value={link}
+                  onChange={({ target }) => setLink(target.value)}
                   size={"20%"}
                   placeholder="Put here your link for post!"
                 ></InputPublish>
                 <InputPublish
+                  disabled={loading}
+                  value={description}
+                  onChange={({ target }) => setDescription(target.value)}
                   size={"50%"}
                   placeholder="Awesome article about #javascript"
                 ></InputPublish>
                 <ContainerButton>
-                  <ButtonPublish>Publish</ButtonPublish>
+                  <ButtonPublish disabled={loading}
+                    onClick={publishPost
+                    }
+                  >
+                    {loading ? "Publishing..." : "Publish"}
+                  </ButtonPublish>
                 </ContainerButton>
               </Publish>
             </ContainerPublish>

@@ -6,7 +6,6 @@ import Logo from "./Logo";
 
 export default function Header() {
   const [search, setSearch] = React.useState("");
-  console.log(search)
   return (
     <Head>
       <Logo size={"2.5rem"} />
