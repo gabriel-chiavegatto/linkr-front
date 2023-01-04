@@ -46,7 +46,6 @@ export default function Header() {
     }
 
     return (
-        <>
             <Head arrowDirection={arrowDirection}>
                 <Logo size={'49px'} />
                 <SeachBox>
@@ -62,8 +61,6 @@ export default function Header() {
                 </Menu>
                 <LogoutAside logOutBar={logOutBar}><p onClick={Logout} >Logout</p></LogoutAside>
             </Head>
-        </>
-
     )
 }
 
@@ -73,11 +70,11 @@ const Head = styled.div`
     background: #151515;
     color: #FFFFFF;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     width: 100%;
     height: 72px;
     padding: 20px;
+    justify-content: space-between;
     
 `;
 const Menu = styled.div`

@@ -4,15 +4,13 @@ import styled from "styled-components";
 function Form({ children, email, password, request }) {
   function sendForm(e) {
     e.preventDefault();
-    console.log("TENTEI");
     const emailError = email.validate();
     const passwordError = password.validate();
     if (!emailError || !passwordError) {
-      console.log("Falta preencher algo");
+      alert("Preencha todos os campos corretamente!")
       return;
     } else {
-      console.log("pode ir pra requisição");
-      request();
+      request('/sign-in', 'post', {email: email.value, password: password.value}, {});
     }
   }
 
