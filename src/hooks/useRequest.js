@@ -30,7 +30,7 @@ function useRequest() {
   }, [])
 
   return {
-    value, loading, error, request
+    value, loading, error, request, setError
   }
 }
 

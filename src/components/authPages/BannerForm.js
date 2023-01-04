@@ -10,11 +10,16 @@ import Input from "../form/Input";
 function BannerForm() {
   const email = useForm("email");
   const password = useForm("password");
-  const {error, loading, value, request} = useRequest()
+  const {error, loading, value, request, setError} = useRequest()
   const navigate = useNavigate()
 
   if(value?.data && !error){
     navigate('/timeline')
+  }
+
+  if(error){
+    alert(error.response.data)
+    setError(null)
   }
 
   return (
