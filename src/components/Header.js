@@ -5,12 +5,14 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Logo from './Logo';
 import axios from "axios";
+import Input from "./form/Input";
 
 export default function Header() {
 
     const navigate = useNavigate();
     const [logOutBar, setLogoutBar] = useState('none');
     const [arrowDirection, setArrowDirection] = useState('rotate(0deg)')
+    const [search, setSearch] = useState("");
 
     function toggleLogoutBar() {
         if (logOutBar === 'none') {
@@ -23,7 +25,7 @@ export default function Header() {
         }
     }
     function Logout() {
-        const api = process.env.API;
+        const api = process.env.API || 'http://localhost:5000'
         useEffect(() => {
             try {
                 axios.post(`${api}/logout`);
@@ -41,11 +43,17 @@ export default function Header() {
         <>
             <Head arrowDirection={arrowDirection}>
                 <Logo size={'49px'} />
-                {/* <section>search</section> */}
-                <section className='profile' onClick={toggleLogoutBar} >
+                <SeachBox>
+                    <Input
+                        placeholder={"Search"}
+                        value={search}
+                        onChange={({ target }) => setSearch(target.value)}
+                    />
+                </SeachBox>
+                <Menu onClick={toggleLogoutBar} >
                     <img className='arrow' src={arrow} alt='people' />
                     <img className='user-picture' src={picture} alt='people' />
-                </section>
+                </Menu>
                 <LogoutAside logOutBar={logOutBar}><p onClick={Logout} >Logout</p></LogoutAside>
             </Head>
         </>
@@ -63,19 +71,19 @@ const Head = styled.div`
     align-items: center;
     width: 100%;
     height: 72px;
-    padding: 0 0 0 28px;
-    .profile{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-    }
+    padding: 20px;
+    
+`;
+const Menu = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     .arrow{
         width: 18.37px;
+        margin: 0 17px;
         transform: ${props => props.arrowDirection};
     }
     .user-picture{
-        margin: 0 17px;
         width: 53px;
         height: 53px;
         border-radius: 50%;
@@ -100,4 +108,11 @@ const LogoutAside = styled.aside`
         text-align: center;
     }
     
+`;
+
+const SeachBox = styled.div`
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
