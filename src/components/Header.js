@@ -1,61 +1,117 @@
-import React from "react";
-import styled from "styled-components";
-import picture from "../logo.svg";
+import picture from '../assets/lula.jpg';
+import styled from 'styled-components';
+import arrow from '../assets/arrow.png'
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import Logo from './Logo';
+import axios from "axios";
 import Input from "./form/Input";
-import Logo from "./Logo";
 
 export default function Header() {
-  const [search, setSearch] = React.useState("");
-  return (
-    <Head>
-      <Logo size={"2.5rem"} />
-      <ContainerSearch>
-        <Input
-          placeholder={"Search"}
-          value={search}
-          onChange={({ target }) => setSearch(target.value)}
-        />
-      </ContainerSearch>
-      <ContainerUser>
-        <Username>Wesley</Username>
-        <img src={picture} alt="people" />
-      </ContainerUser>
-      
-    </Head>
-  );
+
+    const navigate = useNavigate();
+    const [logOutBar, setLogoutBar] = useState('none');
+    const [arrowDirection, setArrowDirection] = useState('rotate(0deg)')
+    const [search, setSearch] = useState("");
+
+    function toggleLogoutBar() {
+        if (logOutBar === 'none') {
+            console.log('try')
+            setLogoutBar('block');
+            setArrowDirection('rotate(180deg)')
+        } else {
+            setLogoutBar('none');
+            setArrowDirection('rotate(0deg)')
+        }
+    }
+    function Logout() {
+        const api = process.env.API || 'http://localhost:5000'
+        useEffect(() => {
+            try {
+                axios.post(`${api}/logout`);
+                // forget data context
+                navigate('/')
+            } catch (error) {
+                console.log("AXIOS ERROR")
+                // forget data context
+                navigate('/')
+            }
+        })
+    }
+
+    return (
+        <>
+            <Head arrowDirection={arrowDirection}>
+                <Logo size={'49px'} />
+                <SeachBox>
+                    <Input
+                        placeholder={"Search"}
+                        value={search}
+                        onChange={({ target }) => setSearch(target.value)}
+                    />
+                </SeachBox>
+                <Menu onClick={toggleLogoutBar} >
+                    <img className='arrow' src={arrow} alt='people' />
+                    <img className='user-picture' src={picture} alt='people' />
+                </Menu>
+                <LogoutAside logOutBar={logOutBar}><p onClick={Logout} >Logout</p></LogoutAside>
+            </Head>
+        </>
+
+    )
 }
 
-const Head = styled.header`
-  box-sizing: border-box;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 72px;
-  background-color: #000;
-  img {
-    width: 53px;
-    height: 53px;
-  }
-`;
 
-const ContainerSearch = styled.div`
-  width: 50%;
-  display: flex;
-  justify-content: center;
-`;
+const Head = styled.div`
 
-const ContainerUser = styled.div`
-    max-width: 33%;
+    background: #151515;
+    color: #FFFFFF;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-`
+    width: 100%;
+    height: 72px;
+    padding: 20px;
+    
+`;
+const Menu = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .arrow{
+        width: 18.37px;
+        margin: 0 17px;
+        transform: ${props => props.arrowDirection};
+    }
+    .user-picture{
+        width: 53px;
+        height: 53px;
+        border-radius: 50%;
+    }
+`;
 
-const Username = styled.span`
-    color: #fff;
-    font-family: 'Oswald';
-    font-size: 1.4rem;
-`
+const LogoutAside = styled.aside`
+    display: ${props => props.logOutBar};
+    position: absolute;
+    top: 72px;
+    right: 0;
+    width: 133px;
+    height: 47px;
+    background: #171717;
+    border-radius: 0px 0px 0px 20px;
+    p{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+    
+`;
+
+const SeachBox = styled.div`
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
