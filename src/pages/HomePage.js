@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Header from "../components/Header";
 import Title from "../components/Title";
 import useRequest from "../hooks/useRequest";
-import picture from "../logo.svg";
+import userImage from '../assets/lula.jpg'
 
 function HomePage() {
   const [link, setLink] = React.useState("");
@@ -46,7 +46,7 @@ function HomePage() {
           <Posts>
             <ContainerPublish>
               <ContainerUserPhoto>
-                <img src={picture} />
+                <ImgUser src={userImage}/>
               </ContainerUserPhoto>
               <Publish>
                 <MessagePublish>
@@ -88,6 +88,14 @@ export default HomePage;
 
 const ContainerHome = styled.div``;
 
+const ImgUser = styled.img`
+  width: 53px;
+  height: 53px;
+  border-radius: 50%;
+  margin-top: 15px;
+  margin-left: 40px;
+`
+
 const ContainerFeed = styled.div`
   background-color: #333333;
   height: 100vh;
@@ -113,9 +121,14 @@ const ContainerPublish = styled.div`
 `;
 
 const ContainerUserPhoto = styled.div`
-  width: 20%;
+  width: 13%;
   height: 100%;
+  display: flex;
+  justify-content: start;
+  box-sizing: border-box;
 `;
+
+
 
 const Publish = styled.div`
   width: 80%;
