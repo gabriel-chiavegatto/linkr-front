@@ -28,12 +28,18 @@ export default function Header() {
         const api = process.env.API || 'http://localhost:5000'
         useEffect(() => {
             try {
-                axios.post(`${api}/logout`);
-                // forget data context
+                const token = window.localStorage.getItem('key')
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+                axios.post(`${api}/logout`, {}, config);
+                window.localStorage.clear();
                 navigate('/')
             } catch (error) {
                 console.log("AXIOS ERROR")
-                // forget data context
+                window.localStorage.clear();
                 navigate('/')
             }
         })

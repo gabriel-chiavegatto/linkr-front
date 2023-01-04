@@ -16,4 +16,5 @@ const Linkr = styled.h1`
   font-family: "Passion One";
   font-weight: bold;
   font-size: ${props => props.size};
+  letter-spacing: 0.05em;
 `
