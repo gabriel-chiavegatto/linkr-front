@@ -14,7 +14,6 @@ function BannerForm() {
   const navigate = useNavigate()
 
   if(value?.data && !error){
-    console.log(value.data)
     navigate('/timeline')
   }
 
