@@ -1,14 +1,14 @@
 import './style/App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Feed from './components/Feed';
 import LoginPage from './pages/LoginPage';
+import HomePage from './pages/HomePage';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<LoginPage />} />
-        <Route path='/feed' element={<Feed />} />
+        <Route path='/timeline' element={<HomePage />} />
       </Routes>
     </BrowserRouter>
   );
