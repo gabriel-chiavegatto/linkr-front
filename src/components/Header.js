@@ -2,7 +2,9 @@ import picture from '../assets/lula.jpg';
 import styled from 'styled-components';
 import arrow from '../assets/arrow.png'
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Logo from './Logo';
+import axios from "axios";
 
 export default function Header() {
 
@@ -20,17 +22,31 @@ export default function Header() {
             setArrowDirection('rotate(0deg)')
         }
     }
+    function Logout() {
+        const api = process.env.API;
+        useEffect(() => {
+            try {
+                axios.post(`${api}/logout`);
+                // forget data context
+                navigate('/')
+            } catch (error) {
+                console.log("AXIOS ERROR")
+                // forget data context
+                navigate('/')
+            }
+        })
+    }
 
     return (
         <>
             <Head arrowDirection={arrowDirection}>
-                <h1>LINKR</h1>
-                <section>search</section>
+                <Logo size={'49px'} />
+                {/* <section>search</section> */}
                 <section className='profile' onClick={toggleLogoutBar} >
                     <img className='arrow' src={arrow} alt='people' />
                     <img className='user-picture' src={picture} alt='people' />
                 </section>
-                <LogoutAside logOutBar={logOutBar}><p onClick={() => navigate('/')} >Logout</p></LogoutAside>
+                <LogoutAside logOutBar={logOutBar}><p onClick={Logout} >Logout</p></LogoutAside>
             </Head>
         </>
 
@@ -42,15 +58,12 @@ const Head = styled.div`
 
     background: #151515;
     color: #FFFFFF;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     height: 72px;
-    h1{
-        padding: 0 28px;
-    }
+    padding: 0 0 0 28px;
     .profile{
         display: flex;
         justify-content: center;
