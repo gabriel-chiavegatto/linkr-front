@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useForm from "../../hooks/useForm";
@@ -6,21 +6,29 @@ import useRequest from "../../hooks/useRequest";
 import Button from "../form/Button";
 import Form from "../form/Form";
 import Input from "../form/Input";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
-function BannerForm() {
-  const email = useForm("email");
-  const password = useForm("password");
-  const {error, loading, value, request, setError} = useRequest()
-  const navigate = useNavigate()
+function BannerForm() {	
+	const email = useForm("email");
+	const password = useForm("password");
+	const {error, loading, value, request, setError} = useRequest()
+  const [storage, setStorage] = useLocalStorage("session_token");
+	const navigate = useNavigate()
+  
+  useEffect(() => {
+    if(value){
+      setStorage(value.data)
+    }
+  }, [value]);
 
-  if(value?.data && !error){
-    navigate('/timeline')
-  }
+	if(value?.data && !error){
+		navigate('/timeline')
+	}
 
-  if(error){
-    alert(error.response.data)
-    setError(null)
-  }
+	if(error){
+		alert(error.response.data)
+		setError(null)
+	}
 
   return (
     <Banner>
@@ -31,7 +39,7 @@ function BannerForm() {
           Log In
         </Button>
       </Form>
-      <Link to={"/feed"}>
+      <Link to={"/sign-up"}>
         <RedirectPage>First time? Create an account!</RedirectPage>
       </Link>
     </Banner>
