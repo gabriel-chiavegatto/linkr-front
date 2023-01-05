@@ -1,50 +1,43 @@
-import { useEffect } from "react";
-import React from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import useLocalStorage from "../../hooks/useLocalStorage";
 import useForm from "../../hooks/useForm";
+import useRequest from "../../hooks/useRequest";
 import Button from "../form/Button";
 import Form from "../form/Form";
 import Input from "../form/Input";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 function BannerForm() {	
-  const email = useForm('email')
-  const password = useForm('password')
-  const [activeButton, setActiveButton] = React.useState(true);
+	const email = useForm("email");
+	const password = useForm("password");
+	const {error, loading, value, request, setError} = useRequest()
+  const [storage, setStorage] = useLocalStorage("session_token");
+	const navigate = useNavigate()
+  
+  useEffect(() => {
+    if(value){
+      setStorage(value.data)
+    }
+  }, [value]);
 
-  const [storage, setStorage] = useLocalStorage("session_token", "");
-  console.log(storage);
+	if(value?.data && !error){
+		navigate('/timeline')
+	}
 
-  	useEffect(()=>{}, [])
-	function request(){ 
-		
-		const req = { 
-			email: email.value, 
-			password: password.value 
-		}; 		
-
-		const whenPromised = (response) => {
-			setStorage(response.data);
-		};
-
-		axios
-			.post("http://localhost:5000/sign-in", req)
-			.then(res => whenPromised(res))
-			.catch(err => console.error(err));
-		setActiveButton(false)
-		setTimeout(() => {
-			setActiveButton(true)
-		}, 3000)
+	if(error){
+		alert(error.response.data)
+		setError(null)
 	}
 
   return (
     <Banner>
       <Form request={request} email={email} password={password}>
-        <Input placeholder={"E-mail"} {...email}/>
-        <Input placeholder={"Password"} {...password}/>
-        <Button request={request} activeButton={activeButton}>Log In</Button>
+        <Input placeholder={"E-mail"} {...email} />
+        <Input type={'password'} placeholder={"Password"} {...password} />
+        <Button request={request} email={email} password={password} loading={loading}>
+          Log In
+        </Button>
       </Form>
       <Link to={"/sign-up"}>
         <RedirectPage>First time? Create an account!</RedirectPage>
