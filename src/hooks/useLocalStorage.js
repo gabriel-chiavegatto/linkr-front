@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 // Hook
-function useLocalStorage(key, initialValue) {
+export default function useLocalStorage(key, initialValue) {
 
         const [storedValue, setStoredValue] = useState(() => {
             if (typeof window === "undefined") {
