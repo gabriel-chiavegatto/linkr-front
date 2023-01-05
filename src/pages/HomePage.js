@@ -12,7 +12,7 @@ function HomePage() {
   console.log('Value: ', value)
   console.log('Error: ', error)
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ildlc2xleUQiLCJwaWN0dXJlX3VybCI6Ind3dy5taW5oYWZvdG8uY29tIiwiaWF0IjoxNjcyODU4NjAzLCJleHAiOjE2NzU0NTA2MDN9.7D2ZZkFzy17qAGCjQmzVpEJZFoSNJX81zGhg474Sups";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRpdGFuaWNvIiwicGljdHVyZV91cmwiOiJodHRwczovL3Bicy50d2ltZy5jb20vcHJvZmlsZV9pbWFnZXMvMTM1NjgyNDM3NzY5NDgzNDY4OS9jOGRnMWNIV180MDB4NDAwLmpwZyIsImlhdCI6MTY3MjkyMTcwMSwiZXhwIjoxNjc1NTEzNzAxfQ.T0xHJoU_3e64x25ufmORrwdQ3gca1gV7OAZjty_yZ9c";
   const headers = { authorization: "Bearer " + token };
 
   if(error){
