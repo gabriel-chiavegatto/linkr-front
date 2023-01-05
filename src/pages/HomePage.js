@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import Title from "../components/Title";
 import useRequest from "../hooks/useRequest";
 import userImage from '../assets/lula.jpg'
+import { DeletePost } from "./deletePost";
 
 function HomePage() {
   const [link, setLink] = React.useState("");
@@ -15,26 +16,26 @@ function HomePage() {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ildlc2xleUQiLCJwaWN0dXJlX3VybCI6Ind3dy5taW5oYWZvdG8uY29tIiwiaWF0IjoxNjcyODU4NjAzLCJleHAiOjE2NzU0NTA2MDN9.7D2ZZkFzy17qAGCjQmzVpEJZFoSNJX81zGhg474Sups";
   const headers = { authorization: "Bearer " + token };
 
-  if(error){
+  if (error) {
     alert('Houve um erro ao publicar seu link, tente novamente!')
     setError(null)
   }
 
-  async function publishPost(){
-    if(link.length === 0){
+  async function publishPost() {
+    if (link.length === 0) {
       alert('Por favor, preencha o link corretamente!')
       return;
     }
-      await request(
-        "/post",
-        "post",
-        {  link, description },
-        { headers }
-      )
-      if(!error){
-        setDescription('')
-        setLink('')
-      }
+    await request(
+      "/post",
+      "post",
+      { link, description },
+      { headers }
+    )
+    if (!error) {
+      setDescription('')
+      setLink('')
+    }
   }
 
   return (
@@ -46,7 +47,7 @@ function HomePage() {
           <Posts>
             <ContainerPublish>
               <ContainerUserPhoto>
-                <ImgUser src={userImage}/>
+                <ImgUser src={userImage} />
               </ContainerUserPhoto>
               <Publish>
                 <MessagePublish>
@@ -80,6 +81,7 @@ function HomePage() {
           <Trendings></Trendings>
         </Feed>
       </ContainerFeed>
+      <DeletePost status={true}/>
     </ContainerHome>
   );
 }
