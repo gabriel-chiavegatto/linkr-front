@@ -1,11 +1,12 @@
-import picture from '../assets/lula.jpg';
+import genericPicture from '../assets/lula.jpg';
 import styled from 'styled-components';
 import arrow from '../assets/arrow.svg'
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import Logo from './Logo';
 import axios from "axios";
 import Input from "./form/Input";
+import ConfigContext from '../configContext';
 
 export default function Header() {
 
@@ -13,6 +14,8 @@ export default function Header() {
     const [logOutBar, setLogoutBar] = useState('none');
     const [arrowDirection, setArrowDirection] = useState('rotate(270deg)')
     const [search, setSearch] = useState("");
+    const {imageProfile} = useContext(ConfigContext);
+    const picture = imageProfile || genericPicture;
 
     function toggleLogoutBar() {
         if (logOutBar === 'none') {
@@ -24,43 +27,41 @@ export default function Header() {
             setArrowDirection('rotate(0deg)')
         }
     }
-    function Logout() {
+    async function Logout() {
         const api = process.env.API || 'http://localhost:5000'
-        useEffect(() => {
-            try {
-                const token = window.localStorage.getItem('key')
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
+        try {
+            const token = window.localStorage.getItem('key')
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
                 }
-                axios.post(`${api}/logout`, {}, config);
-                window.localStorage.clear();
-                navigate('/')
-            } catch (error) {
-                console.log("AXIOS ERROR")
-                window.localStorage.clear();
-                navigate('/')
             }
-        })
+            await axios.post(`${api}/logout`, {}, config);
+            window.localStorage.clear();
+            navigate('/')
+        } catch (error) {
+            console.log("AXIOS ERROR")
+            window.localStorage.clear();
+            navigate('/')
+        }
     }
 
     return (
-            <Head arrowDirection={arrowDirection}>
-                <Logo size={'49px'} />
-                <SeachBox>
-                    <Input
-                        placeholder={"Search"}
-                        value={search}
-                        onChange={({ target }) => setSearch(target.value)}
-                    />
-                </SeachBox>
-                <Menu onClick={toggleLogoutBar} >
-                    <img className='arrow' src={arrow} alt='people' />
-                    <img className='user-picture' src={picture} alt='people' />
-                </Menu>
-                <LogoutAside logOutBar={logOutBar}><p onClick={Logout} >Logout</p></LogoutAside>
-            </Head>
+        <Head arrowDirection={arrowDirection}>
+            <Logo size={'49px'} />
+            <SeachBox>
+                <Input
+                    placeholder={"Search"}
+                    value={search}
+                    onChange={({ target }) => setSearch(target.value)}
+                />
+            </SeachBox>
+            <Menu onClick={toggleLogoutBar} >
+                <img className='arrow' src={arrow} alt='people' />
+                <img className='user-picture' src={picture} alt='people' />
+            </Menu>
+            <LogoutAside logOutBar={logOutBar}><p onClick={Logout} >Logout</p></LogoutAside>
+        </Head>
     )
 }
 
