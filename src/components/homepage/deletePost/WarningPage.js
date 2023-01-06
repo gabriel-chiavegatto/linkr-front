@@ -1,37 +1,57 @@
 import { useState } from "react";
 import styled from "styled-components";
+import useRequest from "../../../hooks/useRequest";
 
-export function DeletePost({ status }) {
 
-    const [warningPage, setWarningPage] = useState('none');
-    const page = () => {
-        status === true ? setWarningPage('flex') : setWarningPage('none')
+export function WarningDeletePost({ postId, activeButton, setActiveButton }) {
+
+    const { value, loadind, error, request, setError } = useRequest();
+
+    const token = '257257'
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     }
     return (
-        <Container warningPage={warningPage}>
+        <WarningContainer>
             <section>
                 <article>
                     <div>
                         <h1>Are you sure you want to delete this post?</h1>
                     </div>
                     <div>
-                        <button className="go-back" onClick={setWarning} >No, go back</button>
-                        <button className="delete">Yes,delete it</button>
+                        <button className="go-back"
+                            onClick={() => {
+                                console.log('try');
+                                setActiveButton(false);
+                                console.log(activeButton)
+                            }} >No, go back</button>
+                        <button className="delete"
+                            onClick={() => {
+                                request(
+                                    `/delete/:${postId}`,
+                                    "delete",
+                                    {},
+                                    config
+                                )
+                            }}
+                        >Yes,delete it</button>
                     </div>
                 </article>
             </section>
-        </Container>
+        </WarningContainer>
     )
 }
 
-const Container = styled.div`
+const WarningContainer = styled.div`
     width: 100vw;
     height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1;
-    display: ${props => props.warningPage};
+    display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(255, 255, 255, 0.85);

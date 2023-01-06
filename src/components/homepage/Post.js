@@ -4,8 +4,11 @@ import styled from "styled-components";
 import ImgUser from "../ImgUser";
 import {ReactTagify} from 'react-tagify'
 import LinkPost from "./LinkPost";
+import useRequest from "../../hooks/useRequest";
+// import { WarningDeletePost } from "./deletePost";
+import { TrashButton } from "./deletePost/TrashButton";
 
-function Post({ src, alt, likes, username, description }) {
+function Post({ src, alt, likes, username, description, postId }) {
   const [liked, setLiked] = React.useState(false);
 
   const tagStyle = {
@@ -32,6 +35,7 @@ function Post({ src, alt, likes, username, description }) {
         </ReactTagify>
         <LinkPost />
       </ContainerInfoPost>
+      <TrashButton postId={postId} />
     </ContainerPost>
   );
 }
@@ -45,6 +49,7 @@ const ContainerPost = styled.div`
   margin-top: 20px;
   border-radius: 16px;
   display: flex;
+  position: relative;
 `;
 
 const Description = styled.p`

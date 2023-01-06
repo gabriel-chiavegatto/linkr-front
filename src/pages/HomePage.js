@@ -7,6 +7,8 @@ import Title from "../components/Title";
 import UserImg from '../assets/lula.jpg'
 
 function HomePage() {
+  const postId = 1;
+
   return (
     <ContainerHome>
       <Header />
@@ -15,15 +17,15 @@ function HomePage() {
         <Feed>
           <Publish />
           <Posts>
-            <Post src={UserImg} 
-                  likes={230000} 
-                  username={'Wesley Dias'} 
-                  description={'Muito maneiro esse tutorial de Material UI com React, deem uma olhada! #react #material'} />
+            <Post src={UserImg}
+              likes={230000}
+              username={'Wesley Dias'}
+              description={'Muito maneiro esse tutorial de Material UI com React, deem uma olhada! #react #material'}
+              postId={postId} />
           </Posts>
           <Trendings></Trendings>
         </Feed>
       </ContainerFeed>
-      <DeletePost status={true} />
     </ContainerHome>
   );
 }
@@ -32,13 +34,6 @@ export default HomePage;
 
 const ContainerHome = styled.div``;
 
-const ImgUser = styled.img`
-  width: 53px;
-  height: 53px;
-  border-radius: 50%;
-  margin-top: 15px;
-  margin-left: 40px;
-`;
 
 const ContainerFeed = styled.div`
   background-color: #333333;
