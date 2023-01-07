@@ -15,8 +15,6 @@ function HomePage() {
   const token = JSON.parse(session_token);
   const headers = { authorization: "Bearer " + token };
 
-  console.log(value?.data)
-
   useEffect(() => {
     request(`/posts?page=1`, "get", {}, { headers });
   }, [offsetPosts]);
@@ -41,6 +39,7 @@ function HomePage() {
                 return (
                   <Post
                     key={p.id}
+                    id={p.id}
                     src={p.picture_url}
                     likes={p.Number_of_likes}
                     username={p.username}

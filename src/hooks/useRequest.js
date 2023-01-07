@@ -8,6 +8,7 @@ function useRequest() {
   const [loading, setLoading] = React.useState(false);
 
   const request = React.useCallback(async (route, method, body, config) => {
+    console.log(method)
     try {
       setError(null);
       setLoading(true);
