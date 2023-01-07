@@ -10,13 +10,13 @@ import { useNavigate } from "react-router-dom";
 
 function Post({ src, likes, username, description, descriptionLink, imageLink, titleLink, link }) {
   const [liked, setLiked] = React.useState(false);
-
+  
   const tagStyle = {
     fontWeight: 700,
   };
+  const navigate = useNavigate()
   const tagClicked = (tag) => {
     let hashtag = (tag.split('#'))[1];
-    const navigate = useNavigate()
     navigate(`/hashtag/${hashtag}`)
   }
 
