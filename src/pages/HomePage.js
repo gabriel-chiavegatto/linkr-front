@@ -30,6 +30,7 @@ function HomePage() {
         <Title>Timeline</Title>
         <Feed>
           <Publish />
+
           <Posts>
             { !value  && loading ? 
               <SkeletonLoading /> :
@@ -37,6 +38,7 @@ function HomePage() {
               value?.data.length === 0 ? 
               <ThereAreNoPosts>There Are No Posts</ThereAreNoPosts> :
               value?.data.map((p) => {
+
                 return (
                   <Post
                     key={p.id}
@@ -54,6 +56,7 @@ function HomePage() {
                 );
               })
             )}
+
           </Posts>
           <Trendings></Trendings>
         </Feed>

@@ -6,8 +6,10 @@ import styled from "styled-components";
 import useRequest from "../../hooks/useRequest";
 import { prepareTooltipMessage } from "../../utils/createMessageTooltip";
 import ImgUser from "../ImgUser";
+import { ReactTagify } from 'react-tagify'
 import LinkPost from "./LinkPost";
-// import useRequest from "../../hooks/useRequest";
+import useRequest from "../../hooks/useRequest";
+import { useNavigate } from "react-router-dom";
 import { TrashButton } from "./deletePost/TrashButton";
 
 function Post({
@@ -22,6 +24,7 @@ function Post({
   link,
 }) {
   const [liked, setLiked] = React.useState(false);
+
   const tagStyle = {
     fontWeight: 700,
   };
@@ -35,8 +38,15 @@ function Post({
   console.log("error: ", error);
   const message = prepareTooltipMessage(value?.data, username, likes)
   
+  
+  const navigate = useNavigate()
+  const tagClicked = (tag) => {
+    let hashtag = (tag.split('#'))[1];
+    navigate(`/hashtag/${hashtag}`)
+  }
 
   return (
+
     <ContainerPost>
       <ContainerLikeAndPhoto>
         <ImgUser src={src} />
@@ -62,7 +72,10 @@ function Post({
       <ContainerClickPost href={link} target="_blank">
         <ContainerInfoPost>
           <Username>{username}</Username>
-          <ReactTagify tagStyle={tagStyle}>
+          <ReactTagify 
+              tagStyle={tagStyle}
+              tagClicked={tagClicked}
+          >
             <Description>{description}</Description>
           </ReactTagify>
           <LinkPost
@@ -74,6 +87,7 @@ function Post({
         </ContainerInfoPost>
       </ContainerClickPost>
  
+
       <TrashButton postId={postId} />
     </ContainerPost>
   );
