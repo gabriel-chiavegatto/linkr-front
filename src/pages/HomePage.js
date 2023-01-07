@@ -5,7 +5,6 @@ import Post from "../components/homepage/Post";
 import Publish from "../components/homepage/Publish";
 import Title from "../components/Title";
 import useRequest from "../hooks/useRequest";
-import lula from '../assets/lula.jpg'
 
 function HomePage() {
   const { error, loading, value, request, setError } = useRequest();
@@ -29,8 +28,7 @@ function HomePage() {
         <Title>Timeline</Title>
         <Feed>
           <Publish />
-          <Posts>
-          
+          <Posts>          
             {value &&
               value.data.map((p) => {
                 return (
