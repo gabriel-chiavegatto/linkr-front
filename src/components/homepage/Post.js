@@ -4,16 +4,11 @@ import styled from "styled-components";
 import ImgUser from "../ImgUser";
 import {ReactTagify} from 'react-tagify'
 import LinkPost from "./LinkPost";
-import useRequest from "../../hooks/useRequest";
-// import { WarningDeletePost } from "./deletePost";
+// import useRequest from "../../hooks/useRequest";
 import { TrashButton } from "./deletePost/TrashButton";
 
-<<<<<<< HEAD
-function Post({ src, alt, likes, username, description, postId }) {
-=======
+function Post({ src, likes, username, description, descriptionLink, imageLink, titleLink, link, postId }) {
 
-function Post({ src, likes, username, description, descriptionLink, imageLink, titleLink, link }) {
->>>>>>> main
   const [liked, setLiked] = React.useState(false);
 
   const tagStyle = {

@@ -29,7 +29,7 @@ export function WarningDeletePost({ postId, activeButton, setActiveButton }) {
                             }} >No, go back</button>
                         <button className="delete"
                             onClick={() => {
-                                request(
+                                 const deleteProcess = request(
                                     `/delete/:${postId}`,
                                     "delete",
                                     {},
