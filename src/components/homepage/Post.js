@@ -8,24 +8,30 @@ import useRequest from "../../hooks/useRequest";
 // import { WarningDeletePost } from "./deletePost";
 import { TrashButton } from "./deletePost/TrashButton";
 
+<<<<<<< HEAD
 function Post({ src, alt, likes, username, description, postId }) {
+=======
+
+function Post({ src, likes, username, description, descriptionLink, imageLink, titleLink, link }) {
+>>>>>>> main
   const [liked, setLiked] = React.useState(false);
 
   const tagStyle = {
     fontWeight: 700,
   };
 
-  
 
   return (
+    
     <ContainerPost>
       <ContainerLikeAndPhoto>
-        <ImgUser src={src} alt={alt} />
+        <ImgUser src={src}/>
         <Likes>
           {liked ? <AiFillHeart onClick={() => setLiked(false)}/> : <AiOutlineHeart onClick={() => setLiked(true)}/>}
           <CountLikes>{liked ? likes+1 : likes} likes</CountLikes>
         </Likes>
       </ContainerLikeAndPhoto>
+      
       <ContainerInfoPost>
         <Username>{username}</Username>
         <ReactTagify
@@ -33,7 +39,7 @@ function Post({ src, alt, likes, username, description, postId }) {
         >
           <Description>{description}</Description>
         </ReactTagify>
-        <LinkPost />
+          <LinkPost description={descriptionLink} image={imageLink} title={titleLink} link={link}/>
       </ContainerInfoPost>
       <TrashButton postId={postId} />
     </ContainerPost>

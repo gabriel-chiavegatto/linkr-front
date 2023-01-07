@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 
 function App() {
-  const tokenLocalStorage = localStorage.getItem("token");
+  const tokenLocalStorage = localStorage.getItem("session_token")
   const imageLocalStorage = localStorage.getItem("image");
   const [token, setToken] = useState(tokenLocalStorage);
   const [imageProfile, setImageProfile] = useState(imageLocalStorage);
