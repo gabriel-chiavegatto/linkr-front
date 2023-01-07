@@ -41,7 +41,7 @@ function Post({ src, likes, username, description, descriptionLink, imageLink, t
 export default Post;
 
 const ContainerPost = styled.div`
-  width: 50%;
+  width: 95%;
   height: 30vh;
   background-color: #171717;
   margin-top: 20px;
@@ -91,7 +91,7 @@ const ContainerLikeAndPhoto = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: end;
+  align-items: center;
   gap: 20px;
 `;
 

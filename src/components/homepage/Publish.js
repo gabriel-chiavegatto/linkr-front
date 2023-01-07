@@ -64,7 +64,7 @@ function Publish() {
 export default Publish;
 
 const ContainerPublish = styled.div`
-  width: 50%;
+  width: 95%;
   height: 30vh;
   background-color: #fff;
   border-radius: 10px;

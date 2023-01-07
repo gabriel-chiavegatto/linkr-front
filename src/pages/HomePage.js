@@ -5,6 +5,7 @@ import Post from "../components/homepage/Post";
 import Publish from "../components/homepage/Publish";
 import Title from "../components/Title";
 import useRequest from "../hooks/useRequest";
+import TrendingList from "../components/homepage/TrendingList";
 
 function HomePage() {
   const { error, loading, value, request, setError } = useRequest();
@@ -21,35 +22,41 @@ function HomePage() {
   console.log(value?.data);
   console.log("error", error);
 
-  return (
-    <ContainerHome>
-      <Header />
-      <ContainerFeed>
-        <Title>Timeline</Title>
-        <Feed>
-          <Publish />
-          <Posts>
-            {value &&
-              value.data.map((p) => {
-                return (
-                  <Post
-                    src={p.picture_url}
-                    likes={p.number_of_likes}
-                    username={p.username}
-                    description={p.description}
-                    descriptionLink={p.descriptionLink}
-                    titleLink={p.titleLink}
-                    link={p.link}
-                    imageLink={p.imageLink}
-                  />
-                );
-              })}
-          </Posts>
-          <Trendings></Trendings>
-        </Feed>
-      </ContainerFeed>
-    </ContainerHome>
-  );
+  	return (
+		<ContainerHome>
+			<Header />
+			<ContainerFeed>
+				<Main>
+					<Title>Timeline</Title>
+					<Feed>
+						<Timeline>
+							<Publish />
+							<Posts>
+								{value && value.data.map((p, index) => {
+									return (
+										<Post
+											key={index}
+											src={p.picture_url}
+											likes={p.number_of_likes}
+											username={p.username}
+											description={p.description}
+											descriptionLink={p.descriptionLink}
+											titleLink={p.titleLink}
+											link={p.link}
+											imageLink={p.imageLink}
+										/>
+									);
+								})}
+							</Posts>
+						</Timeline>
+						<Trendings>
+							<TrendingList />
+						</Trendings>
+					</Feed>
+				</Main>
+			</ContainerFeed>
+		</ContainerHome>
+  	);
 }
 
 export default HomePage;
@@ -69,12 +76,30 @@ const ContainerFeed = styled.div`
   height: 100%;
   width: 100%;
   padding-top: 5%;
-  padding-left: 15%;
   box-sizing: border-box;
+	display: flex;
+	justify-content: center;
+
+	`;
+
+const Main = styled.div`
+	width: 75%;
 `;
 
-const Feed = styled.div``;
+const Timeline = styled.div`
+	width: 65%;
 
-const Posts = styled.div``;
+`;
 
-const Trendings = styled.div``;
+const Feed = styled.div`
+	display: flex;
+	width: 100%;
+`;
+
+const Posts = styled.div`
+	width: 100%;
+`;
+
+const Trendings = styled.div`
+	width: 35%;
+`;
