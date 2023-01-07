@@ -7,6 +7,7 @@ import Title from "../components/Title";
 import useRequest from "../hooks/useRequest";
 
 function HomePage() {
+
   const { error, loading, value, request, setError } = useRequest();
   const { offsetPosts, setOffsetPost } = React.useState();
   const session_token = localStorage.getItem("session_token")
@@ -41,6 +42,7 @@ function HomePage() {
                     titleLink={p.titleLink}
                     link={p.link}
                     imageLink={p.imageLink}
+                    // postId={postId}
                   />
                 );
               })}
@@ -56,13 +58,6 @@ export default HomePage;
 
 const ContainerHome = styled.div``;
 
-const ImgUser = styled.img`
-  width: 53px;
-  height: 53px;
-  border-radius: 50%;
-  margin-top: 15px;
-  margin-left: 40px;
-`;
 
 const ContainerFeed = styled.div`
   background-color: #333333;
