@@ -5,6 +5,7 @@ import Post from "../components/homepage/Post";
 import Publish from "../components/homepage/Publish";
 import Title from "../components/Title";
 import useRequest from "../hooks/useRequest";
+import lula from '../assets/lula.jpg'
 
 function HomePage() {
   const { error, loading, value, request, setError } = useRequest();
@@ -29,7 +30,7 @@ function HomePage() {
         <Feed>
           <Publish />
           <Posts>
-            {value &&
+            {/* {value &&
               value.data.map((p) => {
                 return (
                   <Post
@@ -43,7 +44,17 @@ function HomePage() {
                     imageLink={p.imageLink}
                   />
                 );
-              })}
+              })} */}
+            <Post
+              src={lula}
+              likes= '5000'
+              username='nome'
+              description='uma bela descrição aqui #tretaa #link'
+              // descriptionLink={p.descriptionLink}
+              // titleLink={p.titleLink}
+              // link={p.link}
+              // imageLink={p.imageLink}
+            />
           </Posts>
           <Trendings></Trendings>
         </Feed>
