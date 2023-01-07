@@ -30,7 +30,8 @@ export default function Header() {
     async function Logout() {
         const api = process.env.API || 'http://localhost:5000'
         try {
-            const token = window.localStorage.getItem('key')
+            const session_token = localStorage.getItem("session_token")
+            const token = JSON.parse(session_token)
             const config = {
                 headers: {
                     Authorization: `Bearer ${token}`

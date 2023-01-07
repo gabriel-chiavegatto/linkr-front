@@ -9,9 +9,10 @@ function Publish() {
   const [description, setDescription] = React.useState("");
   const { error, loading, value, request, setError } = useRequest();
 
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ildlc2xleUQiLCJwaWN0dXJlX3VybCI6Ind3dy5taW5oYWZvdG8uY29tIiwiaWF0IjoxNjcyODU4NjAzLCJleHAiOjE2NzU0NTA2MDN9.7D2ZZkFzy17qAGCjQmzVpEJZFoSNJX81zGhg474Sups";
+  const session_token = localStorage.getItem("session_token")
+  const token = JSON.parse(session_token)
   const headers = { authorization: "Bearer " + token };
+
 
   if (error) {
     alert("Houve um erro ao publicar seu link, tente novamente!");
