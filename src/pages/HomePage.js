@@ -29,7 +29,7 @@ function HomePage() {
         <Title>Timeline</Title>
         <Feed>
           <Publish />
-          <Posts>
+          <Posts>          
             {value &&
               value.data.map((p) => {
                 return (
@@ -46,6 +46,7 @@ function HomePage() {
                   />
                 );
               })}
+            
           </Posts>
           <Trendings></Trendings>
         </Feed>

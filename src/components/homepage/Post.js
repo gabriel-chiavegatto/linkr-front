@@ -2,39 +2,45 @@ import React from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import styled from "styled-components";
 import ImgUser from "../ImgUser";
-import {ReactTagify} from 'react-tagify'
+import { ReactTagify } from 'react-tagify'
 import LinkPost from "./LinkPost";
-// import useRequest from "../../hooks/useRequest";
+import useRequest from "../../hooks/useRequest";
+import { useNavigate } from "react-router-dom";
 import { TrashButton } from "./deletePost/TrashButton";
 
 function Post({ src, likes, username, description, descriptionLink, imageLink, titleLink, link, postId }) {
 
   const [liked, setLiked] = React.useState(false);
-
+  
   const tagStyle = {
     fontWeight: 700,
   };
-
+  const navigate = useNavigate()
+  const tagClicked = (tag) => {
+    let hashtag = (tag.split('#'))[1];
+    navigate(`/hashtag/${hashtag}`)
+  }
 
   return (
-    
+
     <ContainerPost>
       <ContainerLikeAndPhoto>
-        <ImgUser src={src}/>
+        <ImgUser src={src} />
         <Likes>
-          {liked ? <AiFillHeart onClick={() => setLiked(false)}/> : <AiOutlineHeart onClick={() => setLiked(true)}/>}
-          <CountLikes>{liked ? likes+1 : likes} likes</CountLikes>
+          {liked ? <AiFillHeart onClick={() => setLiked(false)} /> : <AiOutlineHeart onClick={() => setLiked(true)} />}
+          <CountLikes>{liked ? likes + 1 : likes} likes</CountLikes>
         </Likes>
       </ContainerLikeAndPhoto>
-      
+
       <ContainerInfoPost>
         <Username>{username}</Username>
         <ReactTagify
           tagStyle={tagStyle}
+          tagClicked={tagClicked}
         >
           <Description>{description}</Description>
         </ReactTagify>
-          <LinkPost description={descriptionLink} image={imageLink} title={titleLink} link={link}/>
+        <LinkPost description={descriptionLink} image={imageLink} title={titleLink} link={link} />
       </ContainerInfoPost>
       <TrashButton postId={postId} />
     </ContainerPost>
