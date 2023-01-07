@@ -7,6 +7,8 @@ import useRequest from "../../hooks/useRequest";
 import { prepareTooltipMessage } from "../../utils/createMessageTooltip";
 import ImgUser from "../ImgUser";
 import LinkPost from "./LinkPost";
+// import useRequest from "../../hooks/useRequest";
+import { TrashButton } from "./deletePost/TrashButton";
 
 function Post({
   id,
@@ -71,6 +73,8 @@ function Post({
           />
         </ContainerInfoPost>
       </ContainerClickPost>
+ 
+      <TrashButton postId={postId} />
     </ContainerPost>
   );
 }
@@ -84,6 +88,7 @@ const ContainerPost = styled.div`
   margin-top: 20px;
   border-radius: 16px;
   display: flex;
+  position: relative;
 `;
 
 const ContainerClickPost = styled.a`
