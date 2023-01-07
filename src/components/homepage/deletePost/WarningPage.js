@@ -1,12 +1,14 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useRequest from "../../../hooks/useRequest";
 
 
 export function WarningDeletePost({ postId, activeButton, setActiveButton }) {
 
-    const { value, loadind, error, request, setError } = useRequest();
+    const { value, loading, error, request, setError } = useRequest();
 
+    const navigate = useNavigate();
     const token = '257257'
     const config = {
         headers: {
@@ -29,14 +31,16 @@ export function WarningDeletePost({ postId, activeButton, setActiveButton }) {
                             }} >No, go back</button>
                         <button className="delete"
                             onClick={() => {
-                                 const deleteProcess = request(
-                                    `/delete/:${postId}`,
+                                const deleteProcess = request(
+                                    `/delete-post/:${postId}`,
                                     "delete",
                                     {},
                                     config
                                 )
+                                if (value) { window.location.reload() }
+                                if (error) { alert("Não foi possivel excluir o post"); setActiveButton(false);}
                             }}
-                        >Yes,delete it</button>
+                        >{loading ? <>loading...</> : <>Yes,delete it</>}</button>
                     </div>
                 </article>
             </section>

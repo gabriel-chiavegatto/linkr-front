@@ -8,8 +8,6 @@ import useRequest from "../hooks/useRequest";
 
 function HomePage() {
 
-  const postId = 1;
-
   const { error, loading, value, request, setError } = useRequest();
   const { offsetPosts, setOffsetPost } = React.useState();
   const session_token = localStorage.getItem("session_token")
@@ -44,7 +42,7 @@ function HomePage() {
                     titleLink={p.titleLink}
                     link={p.link}
                     imageLink={p.imageLink}
-                    postId={postId}
+                    // postId={postId}
                   />
                 );
               })}
