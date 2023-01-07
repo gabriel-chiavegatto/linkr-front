@@ -6,9 +6,10 @@ import { ReactTagify } from 'react-tagify'
 import LinkPost from "./LinkPost";
 import useRequest from "../../hooks/useRequest";
 import { useNavigate } from "react-router-dom";
+import { TrashButton } from "./deletePost/TrashButton";
 
+function Post({ src, likes, username, description, descriptionLink, imageLink, titleLink, link, postId }) {
 
-function Post({ src, likes, username, description, descriptionLink, imageLink, titleLink, link }) {
   const [liked, setLiked] = React.useState(false);
   
   const tagStyle = {
@@ -41,6 +42,7 @@ function Post({ src, likes, username, description, descriptionLink, imageLink, t
         </ReactTagify>
         <LinkPost description={descriptionLink} image={imageLink} title={titleLink} link={link} />
       </ContainerInfoPost>
+      <TrashButton postId={postId} />
     </ContainerPost>
   );
 }
@@ -54,6 +56,7 @@ const ContainerPost = styled.div`
   margin-top: 20px;
   border-radius: 16px;
   display: flex;
+  position: relative;
 `;
 
 const Description = styled.p`
