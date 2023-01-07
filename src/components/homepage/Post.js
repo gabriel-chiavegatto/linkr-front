@@ -5,24 +5,26 @@ import ImgUser from "../ImgUser";
 import {ReactTagify} from 'react-tagify'
 import LinkPost from "./LinkPost";
 
-function Post({ src, alt, likes, username, description }) {
+
+function Post({ src, likes, username, description, descriptionLink, imageLink, titleLink, link }) {
   const [liked, setLiked] = React.useState(false);
 
   const tagStyle = {
     fontWeight: 700,
   };
 
-  
 
   return (
+    
     <ContainerPost>
       <ContainerLikeAndPhoto>
-        <ImgUser src={src} alt={alt} />
+        <ImgUser src={src}/>
         <Likes>
           {liked ? <AiFillHeart onClick={() => setLiked(false)}/> : <AiOutlineHeart onClick={() => setLiked(true)}/>}
           <CountLikes>{liked ? likes+1 : likes} likes</CountLikes>
         </Likes>
       </ContainerLikeAndPhoto>
+      
       <ContainerInfoPost>
         <Username>{username}</Username>
         <ReactTagify
@@ -30,7 +32,7 @@ function Post({ src, alt, likes, username, description }) {
         >
           <Description>{description}</Description>
         </ReactTagify>
-        <LinkPost />
+          <LinkPost description={descriptionLink} image={imageLink} title={titleLink} link={link}/>
       </ContainerInfoPost>
     </ContainerPost>
   );

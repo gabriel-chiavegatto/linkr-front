@@ -1,12 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
 import Post from "../components/homepage/Post";
 import Publish from "../components/homepage/Publish";
 import Title from "../components/Title";
-import UserImg from '../assets/lula.jpg'
+import useRequest from "../hooks/useRequest";
 
 function HomePage() {
+  const { error, loading, value, request, setError } = useRequest();
+  const { offsetPosts, setOffsetPost } = React.useState();
+  const session_token = localStorage.getItem("session_token")
+  const token = JSON.parse(session_token)
+  const headers = { authorization: "Bearer " + token };
+
+  const offset = offsetPosts;
+  useEffect(() => {
+    request(`/posts?page=1`, "get", {}, { headers });
+  }, [offsetPosts]);
+
+  console.log(value?.data);
+  console.log("error", error);
+
   return (
     <ContainerHome>
       <Header />
@@ -15,7 +29,21 @@ function HomePage() {
         <Feed>
           <Publish />
           <Posts>
-            <Post src={UserImg} likes={230000} username={'Wesley Dias'} description={'Muito maneiro esse tutorial de Material UI com React, deem uma olhada! #react #material'}/>
+            {value &&
+              value.data.map((p) => {
+                return (
+                  <Post
+                    src={p.picture_url}
+                    likes={p.number_of_likes}
+                    username={p.username}
+                    description={p.description}
+                    descriptionLink={p.descriptionLink}
+                    titleLink={p.titleLink}
+                    link={p.link}
+                    imageLink={p.imageLink}
+                  />
+                );
+              })}
           </Posts>
           <Trendings></Trendings>
         </Feed>
@@ -38,7 +66,7 @@ const ImgUser = styled.img`
 
 const ContainerFeed = styled.div`
   background-color: #333333;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   padding-top: 5%;
   padding-left: 15%;
