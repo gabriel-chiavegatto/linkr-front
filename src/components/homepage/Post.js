@@ -5,25 +5,19 @@ import ImgUser from "../ImgUser";
 import { ReactTagify } from 'react-tagify'
 import LinkPost from "./LinkPost";
 import useRequest from "../../hooks/useRequest";
+import { useNavigate } from "react-router-dom";
 
 
 function Post({ src, likes, username, description, descriptionLink, imageLink, titleLink, link }) {
   const [liked, setLiked] = React.useState(false);
 
-  const { value, loading, error, request, setError, } = useRequest()
-
   const tagStyle = {
     fontWeight: 700,
   };
   const tagClicked = (tag) => {
-    
     let hashtag = (tag.split('#'))[1];
-    request(
-      `/hashtag/${hashtag}`,
-      'get',
-      {},
-      {}
-    )
+    const navigate = useNavigate()
+    navigate(`/hashtag/${hashtag}`)
   }
 
   return (
