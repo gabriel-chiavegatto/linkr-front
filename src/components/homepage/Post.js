@@ -1,9 +1,7 @@
 import { Tooltip } from "@mui/material";
 import React from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { ReactTagify } from "react-tagify";
 import styled from "styled-components";
-import useRequest from "../../hooks/useRequest";
 import { prepareTooltipMessage } from "../../utils/createMessageTooltip";
 import ImgUser from "../ImgUser";
 import { ReactTagify } from 'react-tagify'
@@ -88,7 +86,7 @@ function Post({
       </ContainerClickPost>
  
 
-      <TrashButton postId={postId} />
+      <TrashButton postId={id} />
     </ContainerPost>
   );
 }
