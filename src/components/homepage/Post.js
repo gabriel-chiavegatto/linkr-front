@@ -4,15 +4,33 @@ import styled from "styled-components";
 import ImgUser from "../ImgUser";
 import {ReactTagify} from 'react-tagify'
 import LinkPost from "./LinkPost";
+import axios from "axios";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 
-function Post({ src, likes, username, description, descriptionLink, imageLink, titleLink, link }) {
-  const [liked, setLiked] = React.useState(false);
+function Post({ src, youLiked, likes, username, description, descriptionLink, imageLink, titleLink, link, post_id, user_id }) {
+  const [liked, setLiked] = React.useState(youLiked);
+  const [likeCount, setLikeCount] = React.useState(Number(likes));
+  const [storage, setStorage] = useLocalStorage("session_token");
 
   const tagStyle = {
     fontWeight: 700,
   };
 
+  function doLike(bool){
+    axios
+      .post(`${process.env.REACT_APP_API_BASE_URL}/like`, { post_id, user_id }, {headers: {authorization: `Bearer ${storage}`}})
+      .then(res => {
+        setLiked(bool);
+
+        if(liked){
+          setLikeCount(likeCount-1);
+        }else{
+          setLikeCount(likeCount+1);
+        }
+      })
+      .catch(err => console.error(err));
+  }
 
   return (
     
@@ -20,8 +38,8 @@ function Post({ src, likes, username, description, descriptionLink, imageLink, t
       <ContainerLikeAndPhoto>
         <ImgUser src={src}/>
         <Likes>
-          {liked ? <AiFillHeart onClick={() => setLiked(false)}/> : <AiOutlineHeart onClick={() => setLiked(true)}/>}
-          <CountLikes>{liked ? likes+1 : likes} likes</CountLikes>
+          {liked ? <AiFillHeart color={"red"} onClick={() => doLike(false)}/> : <AiOutlineHeart onClick={() => doLike(true)}/>}
+          <CountLikes>{likeCount} likes</CountLikes>
         </Likes>
       </ContainerLikeAndPhoto>
       
@@ -80,6 +98,9 @@ const Likes = styled.div`
   @media (max-width: 1440px){
     font-size: 0.7rem;
     gap: 5px;
+  }
+  svg{
+    font-size: 1.5rem;
   }
 `
 
