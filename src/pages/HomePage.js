@@ -1,5 +1,6 @@
 import { Alert, Skeleton } from "@mui/material";
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header";
 import Post from "../components/homepage/Post";
@@ -15,8 +16,12 @@ function HomePage() {
   const session_token = localStorage.getItem("session_token");
   const token = JSON.parse(session_token);
   const headers = { authorization: "Bearer " + token };
-
+  const navigate = useNavigate();
+  
   useEffect(() => {
+    if(!token){
+      navigate('/sign-in')
+    }
     request(`/posts?page=1`, "get", {}, { headers });
   }, [offsetPosts]);
 
@@ -38,7 +43,7 @@ function HomePage() {
               value?.data.length === 0 ? 
               <ThereAreNoPosts>There Are No Posts</ThereAreNoPosts> :
               value?.data.map((p) => {
-
+                console.log(p)
                 return (
                   <Post
                     key={p.id}
