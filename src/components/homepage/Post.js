@@ -86,7 +86,7 @@ function Post({
       </ContainerClickPost>
  
 
-      <TrashButton postId={id} />
+      <TrashButton id={id} />
     </ContainerPost>
   );
 }

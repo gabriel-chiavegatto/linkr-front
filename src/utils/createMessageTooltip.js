@@ -1,4 +1,6 @@
 export function prepareTooltipMessage(array, username, likes, ownLiked){
+  console.log("ARRAY",array)
+  if(!array) return ''
   const usernames = array.map((u) => u.username);
 
   if(ownLiked){

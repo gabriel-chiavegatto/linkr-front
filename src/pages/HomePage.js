@@ -54,7 +54,6 @@ function HomePage() {
                       titleLink={p.titleLink}
                       link={p.link}
                       imageLink={p.imageLink}
-                      // postId={postId}
 										/>
 									);
 								})
