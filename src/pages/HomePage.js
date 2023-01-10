@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Alert, Skeleton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header";
 import Post from "../components/homepage/Post";
@@ -20,8 +22,9 @@ function HomePage() {
   const token = JSON.parse(session_token)
   const headers = { authorization: "Bearer " + token };
 
-  const offset = offsetPosts;
 
+  const offset = offsetPosts;
+  const navigate = useNavigate();
 
   useEffect(() => {
 	let link = "/posts?";
@@ -30,7 +33,10 @@ function HomePage() {
 	}
 	link += "page=1";
     request(link, "get", {}, { headers });
-
+    
+    if(!token){
+      navigate('/sign-in')
+    }
 	axios
 		.get(`${process.env.REACT_APP_API_BASE_URL}/hashtag`)
 		.then(res => {
@@ -38,6 +44,7 @@ function HomePage() {
 			console.log(trendlist)
 		})
 		.catch(err => console.error(err));
+    request(`/posts?page=1`, "get", {}, { headers });
   }, [offsetPosts, trendSelected]);
 
   let getTrendName = () => {
