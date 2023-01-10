@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import trashImage from '../../../assets/trash.svg';
 import { WarningDeletePost } from './WarningPage';
 
-export function TrashButton({postId}) {
+export function TrashButton({id}) {
     const [activeButton, setActiveButton] = useState(false)
     return (
         <TrashContainer>
@@ -14,7 +14,7 @@ export function TrashButton({postId}) {
                 onClick={() => { setActiveButton(true) }}>
             </img>
 
-            {activeButton ? <WarningDeletePost postId={postId} activeButton={activeButton} setActiveButton={setActiveButton} /> : <></>
+            {activeButton ? <WarningDeletePost postId={id} activeButton={activeButton} setActiveButton={setActiveButton} /> : <></>
             }
         </TrashContainer >
     )
