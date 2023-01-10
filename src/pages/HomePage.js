@@ -32,11 +32,13 @@ function HomePage() {
 		link += `trending=${trendSelected}&`;
 	}
 	link += "page=1";
-    request(link, "get", {}, { headers });
-    
+
     if(!token){
       navigate('/sign-in')
     }
+	
+    request(link, "get", {}, { headers });
+	
 	axios
 		.get(`${process.env.REACT_APP_API_BASE_URL}/hashtag`)
 		.then(res => {
