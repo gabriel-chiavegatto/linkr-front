@@ -9,11 +9,9 @@ export function WarningDeletePost({ postId, activeButton, setActiveButton }) {
     const { value, loading, error, request, setError } = useRequest();
 
     const navigate = useNavigate();
-    const token = '257257'
+    const token = JSON.parse(localStorage.getItem('session_token'))
     const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
+        headers: { authorization: `Bearer ${token}` }
     }
     return (
         <WarningContainer>
@@ -33,12 +31,12 @@ export function WarningDeletePost({ postId, activeButton, setActiveButton }) {
                             onClick={() => {
                                 const deleteProcess = request(
                                     `/delete-post/:${postId}`,
-                                    "delete",
+                                    "post",
                                     {},
                                     config
                                 )
                                 if (value) { window.location.reload() }
-                                if (error) { alert("Não foi possivel excluir o post"); setActiveButton(false);}
+                                if (error) { alert("Não foi possivel excluir o post"); setActiveButton(false); }
                             }}
                         >{loading ? <>loading...</> : <>Yes,delete it</>}</button>
                     </div>

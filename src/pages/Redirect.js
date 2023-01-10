@@ -26,7 +26,7 @@ export default function Redirect(){
         }
     }, []);
 
-    return(<Bg>abc</Bg>);
+    return(<Bg>521 - Web Server is Down</Bg>);
 }
 
 const Bg = styled.div`
