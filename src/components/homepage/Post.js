@@ -6,6 +6,8 @@ import { prepareTooltipMessage } from "../../utils/createMessageTooltip";
 import ImgUser from "../ImgUser";
 import { ReactTagify } from 'react-tagify'
 import LinkPost from "./LinkPost";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import axios from "axios";
 import useRequest from "../../hooks/useRequest";
 import { useNavigate } from "react-router-dom";
 import { TrashButton } from "./deletePost/TrashButton";
@@ -13,6 +15,7 @@ import { TrashButton } from "./deletePost/TrashButton";
 function Post({
   id,
   src,
+  youLiked,
   likes,
   username,
   description,
@@ -20,16 +23,16 @@ function Post({
   imageLink,
   titleLink,
   link,
+  user_id
 }) {
-  const [liked, setLiked] = React.useState(false);
-
+  const [liked, setLiked] = React.useState(youLiked);
+  const [likeCount, setLikeCount] = React.useState(Number(likes));
+  
   const tagStyle = {
     fontWeight: 700,
   };
-
-  const session_token = localStorage.getItem("session_token");
-  const token = JSON.parse(session_token);
-  const headers = { authorization: "Bearer " + token };
+  const [storage, setStorage] = useLocalStorage("session_token");
+  const headers = { authorization: "Bearer " + storage };
 
   const { error, loading, value, request, setError } = useRequest();
   console.log(`post | ${id} | value: `, value);
@@ -43,6 +46,21 @@ function Post({
     navigate(`/hashtag/${hashtag}`)
   }
 
+  function doLike(bool){
+    axios
+      .post(`${process.env.REACT_APP_API_BASE_URL}/like`, { id, user_id }, {headers: {authorization: `Bearer ${storage}`}})
+      .then(res => {
+        setLiked(bool);
+
+        if(liked){
+          setLikeCount(likeCount-1);
+        }else{
+          setLikeCount(likeCount+1);
+        }
+      })
+      .catch(err => console.error(err));
+  }
+
   return (
 
     <ContainerPost>
@@ -50,20 +68,18 @@ function Post({
         <ImgUser src={src} />
         <Likes>
           {liked ? (
-            <AiFillHeart onClick={() => setLiked(false)} />
+            <AiFillHeart color={"red"} onClick={() => setLiked(false)} />
           ) : (
             <AiOutlineHeart onClick={() => setLiked(true)} />
           )}
-          <Tooltip
-          title={message}
-            onMouseEnter={() =>
-              request(`/likes-post/${id}`, "get", {}, { headers })
-            }
-          >
+            {value && <Tooltip
+              title={message}
+              onMouseEnter={() => request(`/likes-post/${id}`, "get", {}, { headers })}
+            >
             <CountLikes>
               {liked ? Number(likes) + 1 : Number(likes)} likes
             </CountLikes>
-          </Tooltip>
+          </Tooltip>}
         </Likes>
       </ContainerLikeAndPhoto>
 
@@ -141,7 +157,10 @@ const Likes = styled.div`
     font-size: 0.7rem;
     gap: 5px;
   }
-`;
+  svg{
+    font-size: 1.5rem;
+  }
+`
 
 const CountLikes = styled.span``;
 

@@ -1,18 +1,16 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 
-export default function TrendingList(){
 
-
+export default function TrendingList({ trendlist, setTrendSelected }){
 
     return (
     <Main>
         <Title>Hashtag</Title>
         <Contents>
-            <Hashtag># chess</Hashtag>
-            <Hashtag># chess</Hashtag>
-            <Hashtag># chess</Hashtag>
-            <Hashtag># chess</Hashtag>
+            {trendlist && trendlist.map(el => {
+                return <Hashtag onClick={() => setTrendSelected(el.id)}># {el.name}</Hashtag>
+            })}
         </Contents>
     </Main>);
 }
