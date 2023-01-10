@@ -14,7 +14,7 @@ export function TrashButton({id}) {
                 onClick={() => { setActiveButton(true) }}>
             </img>
 
-            {activeButton ? <WarningDeletePost id={postId} activeButton={activeButton} setActiveButton={setActiveButton} /> : <></>
+            {activeButton ? <WarningDeletePost postId={id} activeButton={activeButton} setActiveButton={setActiveButton} /> : <></>
             }
         </TrashContainer >
     )
