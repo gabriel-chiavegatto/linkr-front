@@ -1,25 +1,54 @@
+import { Tooltip } from "@mui/material";
 import React from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import styled from "styled-components";
+import { prepareTooltipMessage } from "../../utils/createMessageTooltip";
 import ImgUser from "../ImgUser";
-import {ReactTagify} from 'react-tagify'
+import { ReactTagify } from 'react-tagify'
 import LinkPost from "./LinkPost";
-import axios from "axios";
 import useLocalStorage from "../../hooks/useLocalStorage";
+import axios from "axios";
+import useRequest from "../../hooks/useRequest";
+import { useNavigate } from "react-router-dom";
+import { TrashButton } from "./deletePost/TrashButton";
 
-
-function Post({ src, youLiked, likes, username, description, descriptionLink, imageLink, titleLink, link, post_id, user_id }) {
+function Post({
+  id,
+  src,
+  youLiked,
+  likes,
+  username,
+  description,
+  descriptionLink,
+  imageLink,
+  titleLink,
+  link,
+  user_id
+}) {
   const [liked, setLiked] = React.useState(youLiked);
   const [likeCount, setLikeCount] = React.useState(Number(likes));
-  const [storage, setStorage] = useLocalStorage("session_token");
-
+  
   const tagStyle = {
     fontWeight: 700,
   };
+  const [storage, setStorage] = useLocalStorage("session_token");
+  const headers = { authorization: "Bearer " + storage };
+
+  const { error, loading, value, request, setError } = useRequest();
+  console.log(`post | ${id} | value: `, value);
+  console.log("error: ", error);
+  const message = prepareTooltipMessage(value?.data, username, likes)
+  
+  
+  const navigate = useNavigate()
+  const tagClicked = (tag) => {
+    let hashtag = (tag.split('#'))[1];
+    navigate(`/hashtag/${hashtag}`)
+  }
 
   function doLike(bool){
     axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/like`, { post_id, user_id }, {headers: {authorization: `Bearer ${storage}`}})
+      .post(`${process.env.REACT_APP_API_BASE_URL}/like`, { id, user_id }, {headers: {authorization: `Bearer ${storage}`}})
       .then(res => {
         setLiked(bool);
 
@@ -33,25 +62,47 @@ function Post({ src, youLiked, likes, username, description, descriptionLink, im
   }
 
   return (
-    
+
     <ContainerPost>
       <ContainerLikeAndPhoto>
-        <ImgUser src={src}/>
+        <ImgUser src={src} />
         <Likes>
-          {liked ? <AiFillHeart color={"red"} onClick={() => doLike(false)}/> : <AiOutlineHeart onClick={() => doLike(true)}/>}
-          <CountLikes>{likeCount} likes</CountLikes>
+          {liked ? (
+            <AiFillHeart color={"red"} onClick={() => setLiked(false)} />
+          ) : (
+            <AiOutlineHeart onClick={() => setLiked(true)} />
+          )}
+            {value && <Tooltip
+              title={message}
+              onMouseEnter={() => request(`/likes-post/${id}`, "get", {}, { headers })}
+            >
+            <CountLikes>
+              {liked ? Number(likes) + 1 : Number(likes)} likes
+            </CountLikes>
+          </Tooltip>}
         </Likes>
       </ContainerLikeAndPhoto>
-      
-      <ContainerInfoPost>
-        <Username>{username}</Username>
-        <ReactTagify
-          tagStyle={tagStyle}
-        >
-          <Description>{description}</Description>
-        </ReactTagify>
-          <LinkPost description={descriptionLink} image={imageLink} title={titleLink} link={link}/>
-      </ContainerInfoPost>
+
+      <ContainerClickPost href={link} target="_blank">
+        <ContainerInfoPost>
+          <Username>{username}</Username>
+          <ReactTagify 
+              tagStyle={tagStyle}
+              tagClicked={tagClicked}
+          >
+            <Description>{description}</Description>
+          </ReactTagify>
+          <LinkPost
+            description={descriptionLink}
+            image={imageLink}
+            title={titleLink}
+            link={link}
+          />
+        </ContainerInfoPost>
+      </ContainerClickPost>
+ 
+
+      <TrashButton postId={id} />
     </ContainerPost>
   );
 }
@@ -65,25 +116,31 @@ const ContainerPost = styled.div`
   margin-top: 20px;
   border-radius: 16px;
   display: flex;
+  position: relative;
+`;
+
+const ContainerClickPost = styled.a`
+  display: block;
+  width: 100%;
 `;
 
 const Description = styled.p`
   color: #fff;
-  font-family: 'Lato';
+  font-family: "Lato";
   font-size: 1.3rem;
-  @media (max-width: 1440px){
+  @media (max-width: 1440px) {
     font-size: 1rem;
   }
-`
+`;
 
 const Username = styled.span`
-  font-family: 'Lato';
+  font-family: "Lato";
   color: #fff;
   font-size: 1.4rem;
-  @media (max-width: 1440px){
+  @media (max-width: 1440px) {
     font-size: 1.2rem;
   }
-`
+`;
 
 const Likes = styled.div`
   color: #fff;
@@ -92,10 +149,11 @@ const Likes = styled.div`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  font-family: 'Lato';
+  font-family: "Lato";
   font-size: 0.9rem;
   gap: 10px;
-  @media (max-width: 1440px){
+  margin-right: 15px;
+  @media (max-width: 1440px) {
     font-size: 0.7rem;
     gap: 5px;
   }
@@ -104,8 +162,7 @@ const Likes = styled.div`
   }
 `
 
-const CountLikes = styled.span`
-`
+const CountLikes = styled.span``;
 
 const ContainerLikeAndPhoto = styled.div`
   width: 15%;

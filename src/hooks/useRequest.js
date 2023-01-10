@@ -8,16 +8,20 @@ function useRequest() {
   const [loading, setLoading] = React.useState(false);
 
   const request = React.useCallback(async (route, method, body, config) => {
+    console.log(method)
     try {
-      setError(null);
-      setLoading(true);
+      setError(null)
+      setLoading(true)
 
       if (method.toLowerCase() === "get") {
         const data = await axios.get(`${API}${route}`, config);
-        setValue(data);
+        setValue(data)
       } else if (method.toLowerCase() === "post") {
         const data = await axios.post(`${API}${route}`, body, config);
-        setValue(data);
+        setValue(data)
+      } else if (method.toLowerCase() === "delete") {
+        const data = await axios.delete(`${API}${route}`, config);
+        setValue(data)
       }
     } catch (err) {
       setError(err);

@@ -3,12 +3,14 @@ import styled from "styled-components";
 import Header from "../components/Header";
 import Post from "../components/homepage/Post";
 import Publish from "../components/homepage/Publish";
+import SkeletonLoading from "../components/homepage/SkeletonLoading";
 import Title from "../components/Title";
 import useRequest from "../hooks/useRequest";
 import TrendingList from "../components/homepage/TrendingList";
 import axios from "axios";
 
 function HomePage() {
+
   const { error, loading, value, request, setError } = useRequest();
   const [ offsetPosts, setOffsetPost ] = useState();
   const [ trendSelected, setTrendSelected ] = useState();
@@ -42,9 +44,6 @@ function HomePage() {
 	return trendlist.find(el => el.id === trendSelected).name;
   }
 
-  console.log(value?.data);
-  console.log("error", error);
-
   	return (
 		<ContainerHome>
 			<Header />
@@ -55,12 +54,17 @@ function HomePage() {
 						<Timeline>
 							{!trendSelected && <Publish />} 
 							<Posts>
-								{value && value.data.map((p, index) => {
+              { !value  && loading ? 
+                  <SkeletonLoading /> :
+                (
+                  value?.data.length === 0 ? 
+                  <ThereAreNoPosts>There Are No Posts</ThereAreNoPosts> :
+                  value?.data.map((p) => {
 									return (
 										<Post
-											key={index}
+											key={p.index}
 											user_id={p.user_id}
-											post_id={p.id}
+											id={p.id}
 											youLiked={p.youLiked}
 											src={p.picture_url}
 											likes={p.Number_of_likes}
@@ -72,7 +76,8 @@ function HomePage() {
 											imageLink={p.imageLink}
 										/>
 									);
-								})}
+								})
+              )}
 							</Posts>
 						</Timeline>
 						<Trendings>
@@ -90,15 +95,27 @@ function HomePage() {
 
 export default HomePage;
 
-const ContainerHome = styled.div``;
-
-const ImgUser = styled.img`
-  width: 53px;
-  height: 53px;
-  border-radius: 50%;
-  margin-top: 15px;
-  margin-left: 40px;
+const ContainerHome = styled.div`
+  background-color: #333333;
+  height: 100%;
+  width: 100%;
 `;
+
+const ThereAreNoPosts = styled.p`
+  font-family: 'Lato';
+  font-size: 1.5rem;
+  color: #fff;
+  margin-top: 20px;
+`
+
+const ContainerError = styled.div`
+  width: 600px;
+  position: fixed;
+  top: 80px;
+  right: 10px;
+  z-index: 1;
+`
+
 
 const ContainerFeed = styled.div`
   background-color: #333333;
