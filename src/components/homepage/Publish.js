@@ -28,6 +28,7 @@ function Publish() {
     if (!error) {
       setDescription("");
       setLink("");
+      window.location.reload();
     }
   }
   return (
