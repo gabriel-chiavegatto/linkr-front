@@ -2,18 +2,20 @@ import genericPicture from '../assets/lula.jpg';
 import styled from 'styled-components';
 import arrow from '../assets/arrow.svg'
 import { useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import Logo from './Logo';
 import axios from "axios";
-import Input from "./form/Input";
 import ConfigContext from '../configContext';
+import React from 'react';
+import {DebounceInput} from 'react-debounce-input';
+import userSearched from '../components/userSearched';
 
 export default function Header() {
 
     const navigate = useNavigate();
     const [logOutBar, setLogoutBar] = useState('none');
     const [arrowDirection, setArrowDirection] = useState('rotate(270deg)')
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState([]);
     const {imageProfile} = useContext(ConfigContext);
     const picture = imageProfile || genericPicture;
 
@@ -47,15 +49,63 @@ export default function Header() {
         }
     }
 
+    function searchUsers(event){
+
+        event.preventDefault();
+        
+        const api = process.env.API || 'http://localhost:5000'
+
+        const user = {
+            search
+        };
+
+        const session_token = localStorage.getItem("session_token")
+            const token = JSON.parse(session_token)
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+
+        const promise = axios.post(`${api}/user`, user, config);
+        promise.then((resp) => {console.log(resp.data); setSearch(resp.data)});
+        promise.catch((err) => {alert(err.response.data.message)});
+    }
+
+    // useEffect(() => {
+
+    //     const api = process.env.API || 'http://localhost:5000'
+
+    //     const session_token = localStorage.getItem("session_token")
+    //     const token = JSON.parse(session_token)
+    //     const config = {
+    //         headers: {
+    //             Authorization: `Bearer ${token}`
+    //         }
+    //     };
+
+    //     const promise = axios.get(`${api}/user`, config);
+    //     promise.then(resp => setSearch(resp.data));
+    //     promise.catch(err => {console.log('DEU RUIM',err.response.data.message); navigate("/"); window.location.reload()})
+    //     console.log("oi")
+    // }, [])
+
     return (
         <Head arrowDirection={arrowDirection}>
             <Logo size={'49px'} />
             <SeachBox>
-                <Input
-                    placeholder={"Search"}
-                    value={search}
-                    onChange={({ target }) => setSearch(target.value)}
-                />
+                <form onSubmit={searchUsers}>
+                    <DebounceInput
+                        minLength={3}
+                        debounceTimeout={300}
+                        placeholder={"Search for people"}
+                        onChange={ event => setSearch(event.target.value)}
+                    />
+                </form>
+                <DivUsers>
+                    {search?.map((item, i) => <userSearched item={item} key={i}/>)}
+                </DivUsers>
+                
             </SeachBox>
             <Menu onClick={toggleLogoutBar} >
                 <img className='arrow' src={arrow} alt='people' />
@@ -122,4 +172,26 @@ const SeachBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    & input{
+        width: 80%;
+        border-radius: 4px;
+        border: none;
+        height: 50px;
+        font-family: 'Oswald';
+        box-sizing: border-box;
+        font-size: 1.1rem;
+        padding: 10px;
+        &::placeholder {
+            font-family: "Oswald";
+            font-weight: bold;
+            font-size: 1rem;
+            color: #9f9f9f;
+        }
+    }
 `;
+
+const DivUsers = styled.div`
+    background-color: red;
+`
+
