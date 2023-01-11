@@ -27,7 +27,7 @@ export function UserFeed() {
         <Container>
             <Main>
                 <TitleBar>
-                    <Title>{user}'s posts</Title>
+                    <Title>User's posts</Title>
                     <button>Follow</button>
                 </TitleBar>
                 <Feed>
