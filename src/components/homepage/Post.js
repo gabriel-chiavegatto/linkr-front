@@ -32,8 +32,6 @@ function Post({
   const headers = { authorization: "Bearer " + token };
 
   const { error, loading, value, request, setError } = useRequest();
-  console.log(`post | ${id} | value: `, value);
-  console.log("error: ", error);
   const message = prepareTooltipMessage(value?.data, username, likes)
   
   

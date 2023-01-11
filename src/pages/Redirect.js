@@ -26,7 +26,7 @@ export default function Redirect(){
         }
     }, []);
 
-    return(<Bg>abc</Bg>);
+    return(<Bg></Bg>);
 }
 
 const Bg = styled.div`

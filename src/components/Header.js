@@ -14,8 +14,8 @@ export default function Header() {
     const [logOutBar, setLogoutBar] = useState('none');
     const [arrowDirection, setArrowDirection] = useState('rotate(270deg)')
     const [search, setSearch] = useState("");
-    const {imageProfile} = useContext(ConfigContext);
-    const picture = imageProfile || genericPicture;
+    const {user} = useContext(ConfigContext);
+    const picture = user.picture_url || genericPicture;
 
     function toggleLogoutBar() {
         if (logOutBar === 'none') {

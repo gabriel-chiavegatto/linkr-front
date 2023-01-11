@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import userImage from "../../assets/lula.jpg";
+import ConfigContext from "../../configContext";
 import useRequest from "../../hooks/useRequest";
 import ImgUser from '../ImgUser'
 
@@ -9,19 +10,18 @@ function Publish() {
   const [description, setDescription] = React.useState("");
   const { error, loading, value, request, setError } = useRequest();
 
-  const session_token = localStorage.getItem("session_token")
-  const token = JSON.parse(session_token)
-  const headers = { authorization: "Bearer " + token };
+  const {user} = useContext(ConfigContext);
+  const headers = { authorization: "Bearer " + user.token };
 
 
   if (error) {
-    alert("Houve um erro ao publicar seu link, tente novamente!");
+    alert("Fill in the fields correctly!");
     setError(null);
   }
 
   async function publishPost() {
     if (link.length === 0) {
-      alert("Por favor, preencha o link corretamente!");
+      alert("Fill in the fields correctly!");
       return;
     }
     await request("/post", "post", { link, description }, { headers });
@@ -33,7 +33,7 @@ function Publish() {
   return (
     <ContainerPublish>
       <ContainerUserPhoto>
-        <ImgUser src={userImage} />
+        <ImgUser src={user.picture_url ?? userImage} />
       </ContainerUserPhoto>
       <PublishBox>
         <MessagePublish>What are you going to share today?</MessagePublish>

@@ -1,5 +1,4 @@
-import { Alert, Skeleton } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
 import Post from "../components/homepage/Post";
@@ -8,14 +7,15 @@ import SkeletonLoading from "../components/homepage/SkeletonLoading";
 import Title from "../components/Title";
 import useRequest from "../hooks/useRequest";
 import TrendingList from "../components/homepage/TrendingList";
+import ConfigContext from "../configContext";
 
 function HomePage() {
 
+  const {user} = useContext(ConfigContext)
+  console.log(user)
   const { error, loading, value, request, setError } = useRequest();
   const { offsetPosts, setOffsetPost } = React.useState();
-  const session_token = localStorage.getItem("session_token");
-  const token = JSON.parse(session_token);
-  const headers = { authorization: "Bearer " + token };
+  const headers = { authorization: "Bearer " + user.token };
 
   useEffect(() => {
     request(`/posts?page=1`, "get", {}, { headers });
@@ -49,7 +49,6 @@ function HomePage() {
                       titleLink={p.titleLink}
                       link={p.link}
                       imageLink={p.imageLink}
-                      // postId={postId}
 										/>
 									);
 								})
