@@ -85,7 +85,7 @@ function Post({
 
       <ContainerClickPost href={link} target="_blank">
         <ContainerInfoPost>
-          <Username onClick={()=>navigate(`/user/${id}`)}>{username}</Username>
+          <Username onClick={()=>navigate(`/user/${user_id}`)}>{username}</Username>
           <ReactTagify 
               tagStyle={tagStyle}
               tagClicked={tagClicked}

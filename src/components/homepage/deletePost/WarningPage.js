@@ -30,13 +30,13 @@ export function WarningDeletePost({ postId, activeButton, setActiveButton }) {
                         <button className="delete"
                             onClick={() => {
                                 const deleteProcess = request(
-                                    `/delete-post/:${postId}`,
+                                    `/delete-post/${postId}`,
                                     "post",
                                     {},
                                     config
                                 )
-                                if (value) { window.location.reload() }
                                 if (error) { alert("Não foi possivel excluir o post"); setActiveButton(false); }
+                                else { window.location.reload() }
                             }}
                         >{loading ? <>loading...</> : <>Yes,delete it</>}</button>
                     </div>

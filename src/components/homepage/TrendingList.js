@@ -9,7 +9,7 @@ export default function TrendingList({ trendlist, setTrendSelected }){
         <Title>Hashtag</Title>
         <Contents>
             {trendlist && trendlist.map(el => {
-                return <Hashtag onClick={() => setTrendSelected(el.id)}># {el.name}</Hashtag>
+                return <Hashtag onClick={() => setTrendSelected(el.id)} ># {el.name}</Hashtag>
             })}
         </Contents>
     </Main>);
