@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../Auth";
 import { Alert, Skeleton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -10,6 +11,7 @@ import Title from "../components/Title";
 import useRequest from "../hooks/useRequest";
 import TrendingList from "../components/homepage/TrendingList";
 import axios from "axios";
+import UserSearched from "../components/userSearched";
 
 function HomePage() {
 
@@ -17,6 +19,7 @@ function HomePage() {
   const [ offsetPosts, setOffsetPost ] = useState();
   const [ trendSelected, setTrendSelected ] = useState();
   const [ trendlist, setTrendlist ] = useState();
+  const {quest} = useContext(AuthContext)
   
   const session_token = localStorage.getItem("session_token")
   const token = JSON.parse(session_token)
@@ -54,6 +57,9 @@ function HomePage() {
   	return (
 		<ContainerHome>
 			<Header />
+			<DivUsers>
+                {quest?.map((item, i) => <UserSearched item={item} key={i}/>)}                 
+            </DivUsers>
 			<ContainerFeed>
 				<Main>
 					<Title>{trendSelected ? "#" + getTrendName(): "Timeline"}</Title>
@@ -101,6 +107,17 @@ function HomePage() {
 }
 
 export default HomePage;
+
+const DivUsers = styled.div`
+    
+    position: relative;
+    left: 0;
+	top: -11px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+`
 
 const ContainerHome = styled.div`
   background-color: #333333;

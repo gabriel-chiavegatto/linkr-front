@@ -3,21 +3,23 @@ import styled from 'styled-components';
 import arrow from '../assets/arrow.svg'
 import { useNavigate } from 'react-router-dom';
 import { useContext, useState, useEffect } from 'react';
+import { AuthContext } from '../Auth';
 import Logo from './Logo';
 import axios from "axios";
 import ConfigContext from '../configContext';
 import React from 'react';
 import {DebounceInput} from 'react-debounce-input';
-import userSearched from '../components/userSearched';
 
 export default function Header() {
 
     const navigate = useNavigate();
     const [logOutBar, setLogoutBar] = useState('none');
     const [arrowDirection, setArrowDirection] = useState('rotate(270deg)')
-    const [search, setSearch] = useState([]);
     const {imageProfile} = useContext(ConfigContext);
     const picture = imageProfile || genericPicture;
+
+    const {setQuest} = useContext(AuthContext);
+  
 
     function toggleLogoutBar() {
         if (logOutBar === 'none') {
@@ -49,63 +51,48 @@ export default function Header() {
         }
     }
 
-    function searchUsers(event){
+    const handleChange = (value => {
 
-        event.preventDefault();
         
         const api = process.env.API || 'http://localhost:5000'
 
-        const user = {
-            search
-        };
-
         const session_token = localStorage.getItem("session_token")
-            const token = JSON.parse(session_token)
+        const token = JSON.parse(session_token)
+        
+
+        if(value.length >= 3){
             const config = {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
+            };
+    
+            const user = {
+                search: value
             }
 
-        const promise = axios.post(`${api}/user`, user, config);
-        promise.then((resp) => {console.log(resp.data); setSearch(resp.data)});
-        promise.catch((err) => {alert(err.response.data.message)});
-    }
+           const promise =  axios.post(`${api}/user`, user, config);
+            promise.then(resp => setQuest(resp.data));
+            promise.catch((err => {alert(err.response?.data.message)}))
 
-    // useEffect(() => {
+        } else {
+            setQuest([]);
+        }
+        
 
-    //     const api = process.env.API || 'http://localhost:5000'
-
-    //     const session_token = localStorage.getItem("session_token")
-    //     const token = JSON.parse(session_token)
-    //     const config = {
-    //         headers: {
-    //             Authorization: `Bearer ${token}`
-    //         }
-    //     };
-
-    //     const promise = axios.get(`${api}/user`, config);
-    //     promise.then(resp => setSearch(resp.data));
-    //     promise.catch(err => {console.log('DEU RUIM',err.response.data.message); navigate("/"); window.location.reload()})
-    //     console.log("oi")
-    // }, [])
+       
+    })
 
     return (
         <Head arrowDirection={arrowDirection}>
             <Logo size={'49px'} />
             <SeachBox>
-                <form onSubmit={searchUsers}>
-                    <DebounceInput
-                        minLength={3}
-                        debounceTimeout={300}
-                        placeholder={"Search for people"}
-                        onChange={ event => setSearch(event.target.value)}
-                    />
-                </form>
-                <DivUsers>
-                    {search?.map((item, i) => <userSearched item={item} key={i}/>)}
-                </DivUsers>
-                
+                <DebounceInput
+                    minLength={3}
+                    debounceTimeout={300}
+                    placeholder={"Search for people"}
+                    onChange={ event => handleChange(event.target.value)}
+                />               
             </SeachBox>
             <Menu onClick={toggleLogoutBar} >
                 <img className='arrow' src={arrow} alt='people' />
@@ -170,9 +157,10 @@ const LogoutAside = styled.aside`
 const SeachBox = styled.div`
     width: 50%;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     flex-direction: column;
+    position: relative;
     & input{
         width: 80%;
         border-radius: 4px;
@@ -182,6 +170,7 @@ const SeachBox = styled.div`
         box-sizing: border-box;
         font-size: 1.1rem;
         padding: 10px;
+        z-index: 1;
         &::placeholder {
             font-family: "Oswald";
             font-weight: bold;
@@ -191,7 +180,5 @@ const SeachBox = styled.div`
     }
 `;
 
-const DivUsers = styled.div`
-    background-color: red;
-`
+
 
