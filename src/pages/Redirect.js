@@ -25,10 +25,7 @@ export default function Redirect(){
             navigate("/sign-in")
         }
     }, []);
-
     return(<Bg></Bg>);
-}
-
 const Bg = styled.div`
     background-color: #333;
 `;

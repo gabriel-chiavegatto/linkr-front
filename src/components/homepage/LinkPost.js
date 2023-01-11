@@ -4,6 +4,10 @@ import styled from "styled-components";
 
 function LinkPost({ title, description, link, image }) {
   const navigate = useNavigate()
+  if(!title){title = 'error ao carregar'}
+  if(!description){description = 'error ao carregar'}
+  if(!link){link = 'https://www.google.com/'}
+  if(!image){image = 'error ao carregar'}
   function clickPost(link){
     navigate(JSON.stringify(link))
   }

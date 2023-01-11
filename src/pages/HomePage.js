@@ -1,4 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { Alert, Skeleton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header";
 import Post from "../components/homepage/Post";
@@ -8,6 +10,7 @@ import Title from "../components/Title";
 import useRequest from "../hooks/useRequest";
 import TrendingList from "../components/homepage/TrendingList";
 import ConfigContext from "../configContext";
+import axios from "axios";
 
 function HomePage() {
 
@@ -16,20 +19,51 @@ function HomePage() {
   const { error, loading, value, request, setError } = useRequest();
   const { offsetPosts, setOffsetPost } = React.useState();
   const headers = { authorization: "Bearer " + user.token };
+  const [ offsetPosts, setOffsetPost ] = useState();
+  const [ trendSelected, setTrendSelected ] = useState();
+  const [ trendlist, setTrendlist ] = useState();
+  
+  const session_token = localStorage.getItem("session_token")
+  const token = JSON.parse(session_token)
+  const headers = { authorization: "Bearer " + token };
+
+  const offset = offsetPosts;
+  const navigate = useNavigate();
 
   useEffect(() => {
+	let link = "/posts?";
+	if(trendSelected){
+		link += `trending=${trendSelected}&`;
+	}
+	link += "page=1";
+    request(link, "get", {}, { headers });
+    
+    if(!token){
+      navigate('/sign-in')
+    }
+	axios
+		.get(`${process.env.REACT_APP_API_BASE_URL}/hashtag`)
+		.then(res => {
+			setTrendlist(res.data);
+			console.log(trendlist)
+		})
+		.catch(err => console.error(err));
     request(`/posts?page=1`, "get", {}, { headers });
-  }, [offsetPosts]);
+  }, [offsetPosts, trendSelected]);
+
+  let getTrendName = () => {
+	return trendlist.find(el => el.id === trendSelected).name;
+  }
 
   	return (
 		<ContainerHome>
 			<Header />
 			<ContainerFeed>
 				<Main>
-					<Title>Timeline</Title>
+					<Title>{trendSelected ? "#" + getTrendName(): "Timeline"}</Title>
 					<Feed>
 						<Timeline>
-							<Publish />
+							{!trendSelected && <Publish />} 
 							<Posts>
               { !value  && loading ? 
                   <SkeletonLoading /> :
@@ -56,7 +90,10 @@ function HomePage() {
 							</Posts>
 						</Timeline>
 						<Trendings>
-							<TrendingList />
+							<TrendingList
+								trendlist={trendlist}
+								setTrendSelected={setTrendSelected} 
+							/>
 						</Trendings>
 					</Feed>
 				</Main>
