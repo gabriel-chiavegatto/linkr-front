@@ -7,6 +7,7 @@ import Redirect from './pages/Redirect';
 import ConfigContext from './configContext';
 import { useState } from 'react';
 import UserPage from './pages/UserPage';
+import HashtagPage from './pages/HashtagPage';
 
 
 function App() {
@@ -22,8 +23,9 @@ function App() {
           <Route path="/" element={<Redirect />} />
           <Route path='/timeline' element={<HomePage />} />
           <Route path='/sign-in' element={<LoginPage />} />
-          <Route path='/sign-up' element={<SignUpPage/>} />
+          <Route path='/sign-up' element={<SignUpPage />} />
           <Route path='/user/:id' element={<UserPage />} />
+          <Route path='/hashtag/:hashtag' element={<HashtagPage />} />
         </Routes>
       </BrowserRouter>
     </ConfigContext.Provider>

@@ -28,9 +28,9 @@ function HomePage() {
 
   useEffect(() => {
 	let link = "/posts?";
-	if(trendSelected){
-		link += `trending=${trendSelected}&`;
-	}
+	// if(trendSelected){
+	// 	link += `trending=${trendSelected}&`;
+	// }
 	link += "page=1";
 
     if(!token){
@@ -39,14 +39,16 @@ function HomePage() {
 	
     request(link, "get", {}, { headers });
 	
-	axios
-		.get(`${process.env.REACT_APP_API_BASE_URL}/hashtag`)
-		.then(res => {
-			setTrendlist(res.data);
-			console.log(trendlist)
-		})
-		.catch(err => console.error(err));
-    request(`/posts?page=1`, "get", {}, { headers });
+	// axios
+	// 	.get(`${process.env.REACT_APP_API_BASE_URL}/hashtag`)
+	// 	.then(res => {
+	// 		setTrendlist(res.data);
+	// 		console.log(trendlist)
+	// 	})
+	// 	.catch(err => console.error(err));
+	
+    // request(`/posts?page=1`, "get", {}, { headers });
+
   }, [offsetPosts, trendSelected]);
 
   let getTrendName = () => {
