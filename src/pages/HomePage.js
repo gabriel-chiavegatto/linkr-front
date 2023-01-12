@@ -41,10 +41,9 @@ function HomePage() {
 		.get(`${process.env.REACT_APP_API_BASE_URL}/hashtag`)
 		.then(res => {
 			setTrendlist(res.data);
-			console.log(trendlist)
 		})
 		.catch(err => console.error(err));
-    request(`/posts?page=1`, "get", {}, { headers });
+    request(link, "get", {}, { headers });
   }, [offsetPosts, trendSelected]);
 
   let getTrendName = () => {
@@ -67,23 +66,23 @@ function HomePage() {
                   value?.data.length === 0 ? 
                   <ThereAreNoPosts>There Are No Posts</ThereAreNoPosts> :
                   value?.data.map((p) => {
-									return (
-										<Post
-											key={p.index}
-											user_id={p.user_id}
-											id={p.id}
-											youLiked={p.youLiked}
-											src={p.picture_url}
-											likes={p.Number_of_likes}
-											username={p.username}
-											description={p.description}
-											descriptionLink={p.descriptionLink}
-											titleLink={p.titleLink}
-											link={p.link}
-											imageLink={p.imageLink}
-										/>
-									);
-								})
+						return (
+							<Post
+								key={p.index}
+								user_id={p.user_id}
+								id={p.id}
+								youLiked={p.youLiked}
+								src={p.picture_url}
+								likes={p.Number_of_likes}
+								username={p.username}
+								description={p.description}
+								descriptionLink={p.descriptionLink}
+								titleLink={p.titleLink}
+								link={p.link}
+								imageLink={p.imageLink}
+							/>
+						);
+					})
               )}
 							</Posts>
 						</Timeline>

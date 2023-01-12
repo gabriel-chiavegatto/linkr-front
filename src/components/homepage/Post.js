@@ -26,18 +26,17 @@ function Post({
   user_id
 }) {
   const [liked, setLiked] = React.useState(youLiked);
-  const [likeCount, setLikeCount] = React.useState(Number(likes));
-  
+  const [likeCount, setLikeCount] = React.useState();
   const tagStyle = {
     fontWeight: 700,
   };
-  const [storage, setStorage] = useLocalStorage("session_token");
+  const [storage] = useLocalStorage("session_token");
   const headers = { authorization: "Bearer " + storage };
 
   const { error, loading, value, request, setError } = useRequest();
   console.log(`post | ${id} | value: `, value);
   console.log("error: ", error);
-  const message = prepareTooltipMessage(value?.data, username, likes)
+  const message = prepareTooltipMessage(value?.data, username, likeCount)
   
   
   const navigate = useNavigate()
@@ -45,22 +44,21 @@ function Post({
     let hashtag = (tag.split('#'))[1];
     navigate(`/hashtag/${hashtag}`)
   }
-
   function doLike(bool){
     axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/like`, { id, user_id }, {headers: {authorization: `Bearer ${storage}`}})
+      .post(`${process.env.REACT_APP_API_BASE_URL}/like`, { post_id: id, user_id }, {headers: {authorization: `Bearer ${storage}`}})
       .then(res => {
         setLiked(bool);
 
-        if(liked){
-          setLikeCount(likeCount-1);
+        if(youLiked){
+          setLikeCount(Number(likes)-1);
         }else{
-          setLikeCount(likeCount+1);
+          setLikeCount(Number(likes)+1);
         }
       })
       .catch(err => console.error(err));
-  }
-
+    }
+    
   return (
 
     <ContainerPost>
@@ -68,18 +66,18 @@ function Post({
         <ImgUser src={src} />
         <Likes>
           {liked ? (
-            <AiFillHeart color={"red"} onClick={() => setLiked(false)} />
+            <AiFillHeart color={"red"} onClick={() => doLike(false)} />
           ) : (
-            <AiOutlineHeart onClick={() => setLiked(true)} />
+            <AiOutlineHeart onClick={() => doLike(true)} />
           )}
             {value && <Tooltip
               title={message}
               onMouseEnter={() => request(`/likes-post/${id}`, "get", {}, { headers })}
             >
-            <CountLikes>
-              {liked ? Number(likes) + 1 : Number(likes)} likes
-            </CountLikes>
           </Tooltip>}
+            <CountLikes>
+              {likeCount? likeCount :Number(likes)} likes
+            </CountLikes>
         </Likes>
       </ContainerLikeAndPhoto>
 
