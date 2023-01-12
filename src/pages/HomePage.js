@@ -112,7 +112,7 @@ const DivUsers = styled.div`
     
     position: relative;
     left: 0;
-	top: -11px;
+	top: -13px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
