@@ -9,7 +9,11 @@ import Title from "../components/Title";
 import Post from "../components/homepage/Post";
 import TrendingList from "../components/homepage/TrendingList";
 import SkeletonLoading from "../components/homepage/SkeletonLoading";
-import useRequest from '../hooks/useRequest.js'
+import useRequest from '../hooks/useRequest.js';
+
+
+import { ContainerHome, ThereAreNoPosts, ContainerFeed, Main, Timeline, Feed, Posts, Trendings } from '../style/styledFeed'
+
 
 
 export default function UserPage() {
@@ -78,62 +82,6 @@ export default function UserPage() {
         </ContainerHome>
     );
 }
-
-const ContainerHome = styled.div`
-  background-color: #333333;
-  height: 100%;
-  width: 100%;
-`;
-
-const ThereAreNoPosts = styled.p`
-  font-family: 'Lato';
-  font-size: 1.5rem;
-  color: #fff;
-  margin-top: 20px;
-`
-
-const ContainerError = styled.div`
-  width: 600px;
-  position: fixed;
-  top: 80px;
-  right: 10px;
-  z-index: 1;
-`
-
-
-const ContainerFeed = styled.div`
-  background-color: #333333;
-  height: 100%;
-  width: 100%;
-  padding-top: 5%;
-  box-sizing: border-box;
-	display: flex;
-	justify-content: center;
-
-	`;
-
-const Main = styled.div`
-	width: 75%;
-`;
-
-const Timeline = styled.div`
-	width: 65%;
-
-`;
-
-const Feed = styled.div`
-	display: flex;
-	width: 100%;
-`;
-
-const Posts = styled.div`
-	width: 100%;
-`;
-
-const Trendings = styled.div`
-	width: 35%;
-`;
-
 
 const TitleContainer = styled.div`
     width: 100%;
