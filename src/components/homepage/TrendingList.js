@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, {useState, useEffect, useContext} from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +16,41 @@ export default function TrendingList({ trendlist, setTrendSelected, gotoHashtag 
             })}
         </Contents>
     </Main>);
+=======
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import useRequest from "../../hooks/useRequest.js";
+
+
+export default function TrendingList({ trendlist, setTrendSelected }) {
+
+    const token = JSON.parse(localStorage.getItem("session_token"));
+    const headers = { authorization: "Bearer " + token };
+    const navigate = useNavigate();
+    const { error, loading, value, request, setError } = useRequest();
+
+
+    useEffect(() => {
+        request('/hashtag', 'get', {}, { headers })
+    }, [])
+
+
+
+    return (
+        <Main>
+            <Title>Hashtag</Title>
+            <Contents>
+                {!value && loading ? <Hashtag>LOADING...</Hashtag> :
+                    (value?.data.length === 0 ?
+                        <Hashtag>There is no hashtags</Hashtag> :
+                        value?.data.map(el => {
+                            return <Hashtag key={el.index} onClick={() => navigate(`/hashtag/${el.name}`)} ># {el.name}</Hashtag>
+                        }))
+                }
+            </Contents>
+        </Main>)
+>>>>>>> main
 }
 
 const Main = styled.div`

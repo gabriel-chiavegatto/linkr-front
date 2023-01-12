@@ -13,7 +13,7 @@ export default function Redirect(){
         console.log(storage);
         if(storage){
             axios
-                .post(`${process.env.REACT_APP_API_BASE_URL}/session`, {session_token: storage})
+                .post(`${process.env.REACT_APP_API_BASE_URL}/session`, {session_token: storage.token})
                 .then(res => {
                     navigate("/timeline")
                     console.log(res)
@@ -25,8 +25,7 @@ export default function Redirect(){
             navigate("/sign-in")
         }
     }, []);
-
-    return(<Bg>521 - Web Server is Down</Bg>);
+    return(<Bg></Bg>);
 }
 
 const Bg = styled.div`

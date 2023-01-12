@@ -40,7 +40,13 @@ function Post({
   const inputEl = React.useRef(null);
 
   const { error, loading, value, request, setError } = useRequest();
+<<<<<<< HEAD
   const message = prepareTooltipMessage(value?.data, username, likeCount)
+=======
+
+  const message = prepareTooltipMessage(value?.data, username, likes)
+  
+>>>>>>> main
   
   const navigate = useNavigate()
   const tagClicked = (tag) => {
@@ -112,6 +118,7 @@ function Post({
           <ContainerInfoPost>
             <Username>{username}</Username>
 
+<<<<<<< HEAD
             {editMode? 
               <EditDescription 
                 ref={inputEl} 
@@ -149,6 +156,49 @@ function Post({
           </HiddenCommentArea>
         </CommentsArea>
       </ContainerPost>
+=======
+    <ContainerPost>
+      <ContainerLikeAndPhoto>
+        <ImgUser src={src} />
+        <Likes>
+          {liked ? (
+            <AiFillHeart color={"red"} onClick={() => setLiked(false)} />
+          ) : (
+            <AiOutlineHeart onClick={() => setLiked(true)} />
+          )}
+            {value && <Tooltip
+              title={message}
+              onMouseEnter={() => request(`/likes-post/${id}`, "get", {}, { headers })}
+            >
+            <CountLikes>
+              {liked ? Number(likes) + 1 : Number(likes)} likes
+            </CountLikes>
+          </Tooltip>}
+        </Likes>
+      </ContainerLikeAndPhoto>
+
+      <ContainerClickPost href={link} target="_blank">
+        <ContainerInfoPost>
+          <Username onClick={()=>navigate(`/user/${user_id}`)}>{username}</Username>
+          <ReactTagify 
+              tagStyle={tagStyle}
+              tagClicked={tagClicked}
+          >
+            <Description>{description}</Description>
+          </ReactTagify>
+          <LinkPost
+            description={descriptionLink}
+            image={imageLink}
+            title={titleLink}
+            link={link}
+          />
+        </ContainerInfoPost>
+      </ContainerClickPost>
+ 
+
+      <TrashButton id={id} />
+    </ContainerPost>
+>>>>>>> main
   );
 }
 

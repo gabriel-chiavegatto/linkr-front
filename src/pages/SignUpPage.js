@@ -1,111 +1,115 @@
-import styled from "styled-components";
+import axios from "axios";
 import { useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
-import BannerLinkr from '../components/authPages/BannerLinkr';
-import Input from "../components/form/Input";
+import BannerLinkr from "../components/authPages/BannerLinkr";
 import Button from "../components/form/Button";
+import Form from "../components/form/Form";
+import Input from "../components/form/Input";
+import useForm from "../hooks/useForm";
 
-export default function SignUp(){
+export default function SignUp() {
+  const email = useForm("email");
+  const password = useForm("password");
+  const confirmPassword = useForm("confirm password");
+  const username = useForm("username");
+  const picture_url = useForm("");
+  const [habilit, setHabilit] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [username, setUsername] = useState("");
-    const [picture_url, setPicture_url] = useState("");
-    const [habilit, setHabilit] = useState(false);
-    const [disabled, setDisabled] = useState(false);
+  let navigate = useNavigate();
 
-    let navigate = useNavigate();
 
-    function signUp(event){
+  function signUp(event) {
+    event.preventDefault();
 
-        event.preventDefault();
+    setHabilit(true);
+    setDisabled(true);
 
-        setHabilit(true);
-        setDisabled(true);
+    const registration = {
+      username,
+      email,
+      password,
+      confirmPassword,
+      picture_url,
+    };
 
-        const registration = {
-            username,
-            email,
-            password,
-            confirmPassword,
-            picture_url
-        };
+    const promise = axios.post(
+      `${process.env.REACT_APP_API_BASE_URL}/sign-up`,
+      registration
+    );
 
-        const promise = axios.post(`${process.env.REACT_APP_API_BASE_URL}/sign-up`, registration);
+    promise.then((resp) => {
+      alert("Parabéns por ter criado sua conta");
+      navigate("/");
+      setHabilit(false);
+      setDisabled(false);
+    });
 
-        promise.then((resp => { alert('Parabéns por ter criado sua conta'); navigate("/");}));
+    promise.catch((err) => {
+      if(err?.response.data.message){
+        alert(err.response.data.message);
+      }else{
+        alert("Unfortunately, it was not possible to complete your registration, please try again later!");
+      }
+      setHabilit(false);
+      setDisabled(false);
+    });
+  }
 
-        promise.catch((err) => {alert(err.response.data.message); setHabilit(false); setDisabled(false)});
-    }
-
-    return (
-        <>
-            <ContainerLogin>
-                <BannerLinkr></BannerLinkr>
-
-            <Banner>
-                <form onSubmit={signUp} >
-                    <DivInput>
-                        <Input disabled={disabled} placeholder="Nome" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required></Input>
-                        <Input disabled={disabled} placeholder="E-mail" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required></Input>
-                        <Input disabled={disabled} placeholder="Senha" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required></Input>
-                        <Input disabled={disabled} placeholder="Confirme a senha" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required></Input>
-                        <Input disabled={disabled} placeholder="Foto" type="text" value={picture_url} onChange={(e) => setPicture_url(e.target.value)} required></Input>
-                        <Button disabled={disabled} type="submit"> {!habilit ? "Criar Conta" : <ThreeDots color={"white"}/>} </Button>
-                    </DivInput>
-                </form>
-            
-                <Link to={"/"}>
-                    <RedirectPage>Switch back to login!</RedirectPage>
-                </Link>
-            </Banner>
-            </ContainerLogin>
-        </>
-    )
+  return (
+   <ContainerLogin>
+    <BannerLinkr></BannerLinkr>
+    <BannerForm>
+        <Form onSubmit={signUp}>
+            <Input disabled={disabled} placeholder={"E-mail"} {...email}/>
+            <Input disabled={disabled} placeholder={"Password"} {...password} password={true} type={"password"}/>
+            <Input disabled={disabled} placeholder={"Confirm Password"} {...confirmPassword} password={true} type={"password"}/>
+            <Input disabled={disabled} placeholder={"Username"} {...username}/>
+            <Input disabled={disabled} placeholder={"Picture URL"}/>
+            <Button disabled={disabled} onClick={signUp}>{habilit? <ThreeDots color="#ffffff" width={100} height={50}/> :  "Sign Up"}</Button>
+        </Form>
+        <Link to={"/"}>
+          <RedirectPage>Switch back to log in</RedirectPage>
+        </Link>
+    </BannerForm>
+   </ContainerLogin>
+  );
 }
 
 const ContainerLogin = styled.div`
   display: flex;
+  @media (max-width: 600px){
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #3e3e3e;
+  }
 `
 
 const DivInput = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    & input{
-        width: 303px;
-        height: 45px;
-        margin-top: 10px;
-        border: 1px solid rgb(207,207,207);
-        border-radius: 3px;
-        padding-left: 10px;
-        font-size: 20px;
-        ::placeholder{
-            font-size: 20px;
-            color: black;
-        }
-    }
-    & a{
-        text-decoration: none;
-    }
-   
-`
-
-const Banner = styled.div`
-  background-color: #3e3e3e;
-  width: 40%;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 30px;
+  & input {
+    width: 303px;
+    height: 45px;
+    margin-top: 10px;
+    border: 1px solid rgb(207, 207, 207);
+    border-radius: 3px;
+    padding-left: 10px;
+    font-size: 20px;
+    ::placeholder {
+      font-size: 20px;
+      color: black;
+    }
+  }
+  & a {
+    text-decoration: none;
+  }
 `;
 
 const RedirectPage = styled.span`
@@ -114,3 +118,21 @@ const RedirectPage = styled.span`
   color: #fff;
   text-decoration: underline;
 `;
+
+const BannerForm = styled.div`
+    background-color: #3e3e3e;
+  width: 40%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  @media (max-width: 600px){
+    width: 100%;
+    gap: 30px;
+    height: 100vh;
+    justify-content: start;
+    margin-top: 60px;
+  }
+`
