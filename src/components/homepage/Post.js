@@ -35,6 +35,7 @@ function Post({
   const headers = { authorization: "Bearer " + storage };
 
   const { error, loading, value, request, setError } = useRequest();
+
   const message = prepareTooltipMessage(value?.data, username, likes)
   
   
@@ -83,7 +84,7 @@ function Post({
 
       <ContainerClickPost href={link} target="_blank">
         <ContainerInfoPost>
-          <Username>{username}</Username>
+          <Username onClick={()=>navigate(`/user/${user_id}`)}>{username}</Username>
           <ReactTagify 
               tagStyle={tagStyle}
               tagClicked={tagClicked}

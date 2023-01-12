@@ -1,9 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
 
 function Logo({size}) {
+  const navigate = useNavigate();
   return (
-    <Linkr size={size}>
+    <Linkr size={size} onClick={() => navigate('/timeline')}>
       linkr
     </Linkr>
   )
