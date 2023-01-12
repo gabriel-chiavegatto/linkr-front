@@ -11,7 +11,7 @@ import TrendingList from "../components/homepage/TrendingList";
 import SkeletonLoading from "../components/homepage/SkeletonLoading";
 import useRequest from '../hooks/useRequest.js';
 
-
+import FollowButton from "../components/userPages/FollowButton"; 
 import { ContainerHome, ThereAreNoPosts, ContainerFeed, Main, Timeline, Feed, Posts, Trendings } from '../style/styledFeed'
 
 
@@ -45,7 +45,7 @@ export default function UserPage() {
                 <Main>
                     <TitleContainer>
                         <Title>{value ? <>{value.data[0].username + "'s posts"}</> : <>Loading...</>}</Title>
-                        <button>Follow</button>
+                        <FollowButton id={id}/>
                     </TitleContainer>
                     <Feed>
                         <Timeline>
@@ -92,18 +92,4 @@ const TitleContainer = styled.div`
     padding: 50px 0 40px;
     display: flex;
     justify-content: space-between;
-
-    button{
-        width: 112px;
-        height: 31px;
-        background: #1877F2;
-        border-radius: 5px;
-        border: none;
-        font-family: 'Lato';
-        font-style: normal;
-        font-weight: 700;
-        font-size: 14px;
-        line-height: 17px;
-        color: #FFFFFF;
-    }
 `;
