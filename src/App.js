@@ -20,6 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Redirect />} />
           <Route path='/timeline' element={<HomePage />} />
+          <Route path='/hashtag/:hashtag' element={<HomePage />} />
           <Route path='/sign-in' element={<LoginPage />} />
           <Route path='/sign-up' element={<SignUpPage/>} />
         </Routes>

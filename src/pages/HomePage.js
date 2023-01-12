@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Alert, Skeleton } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header";
 import Post from "../components/homepage/Post";
@@ -10,9 +10,11 @@ import Title from "../components/Title";
 import useRequest from "../hooks/useRequest";
 import TrendingList from "../components/homepage/TrendingList";
 import axios from "axios";
+import ConfigContext from "../configContext";
+
 
 function HomePage() {
-
+    const global = useContext(ConfigContext);
   const { error, loading, value, request, setError } = useRequest();
   const [ offsetPosts, setOffsetPost ] = useState();
   const [ trendSelected, setTrendSelected ] = useState();
@@ -26,12 +28,23 @@ function HomePage() {
   const offset = offsetPosts;
   const navigate = useNavigate();
 
+  function gotoHashtag(id){
+	  global.hashtag = id;
+	  if(id){
+		  navigate(`/hashtag/${id}`);
+	  }else{
+		  navigate(`/timeline`);
+	  }
+  }
   useEffect(() => {
+	console.log(global.hashtag);
+
 	let link = "/posts?";
-	if(trendSelected){
-		link += `trending=${trendSelected}&`;
+	if(global.hashtag){
+		link += `trending=${global.hashtag}&`;
 	}
 	link += "page=1";
+	console.log(link);
     request(link, "get", {}, { headers });
     
     if(!token){
@@ -44,12 +57,11 @@ function HomePage() {
 		})
 		.catch(err => console.error(err));
     request(link, "get", {}, { headers });
-  }, [offsetPosts, trendSelected]);
+  }, [offsetPosts, global.hashtag]);
 
   let getTrendName = () => {
 	return trendlist.find(el => el.id === trendSelected).name;
   }
-
   	return (
 		<ContainerHome>
 			<Header />
@@ -60,36 +72,38 @@ function HomePage() {
 						<Timeline>
 							{!trendSelected && <Publish />} 
 							<Posts>
-              { !value  && loading ? 
-                  <SkeletonLoading /> :
-                (
-                  value?.data.length === 0 ? 
-                  <ThereAreNoPosts>There Are No Posts</ThereAreNoPosts> :
-                  value?.data.map((p) => {
-						return (
-							<Post
-								key={p.index}
-								user_id={p.user_id}
-								id={p.id}
-								youLiked={p.youLiked}
-								src={p.picture_url}
-								likes={p.Number_of_likes}
-								username={p.username}
-								description={p.description}
-								descriptionLink={p.descriptionLink}
-								titleLink={p.titleLink}
-								link={p.link}
-								imageLink={p.imageLink}
-							/>
-						);
-					})
-              )}
+				{ !value  && loading ? 
+					<SkeletonLoading /> :
+					(
+					value?.data.length === 0 ? 
+					<ThereAreNoPosts>There Are No Posts</ThereAreNoPosts> :
+					value?.data.map((p, index) => {
+							return (
+								<Post
+									key={index}
+									user_id={p.user_id}
+									id={p.id}
+									youLiked={p.youLiked}
+									src={p.picture_url}
+									likes={p.Number_of_likes}
+									username={p.username}
+									description={p.description}
+									descriptionLink={p.descriptionLink}
+									titleLink={p.titleLink}
+									link={p.link}
+									imageLink={p.imageLink}
+									gotoHashtag={gotoHashtag}
+								/>
+							);
+						})
+				)}
 							</Posts>
 						</Timeline>
 						<Trendings>
 							<TrendingList
 								trendlist={trendlist}
 								setTrendSelected={setTrendSelected} 
+								gotoHashtag={gotoHashtag}
 							/>
 						</Trendings>
 					</Feed>

@@ -1,15 +1,17 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import ConfigContext from "../../configContext";
 
-
-export default function TrendingList({ trendlist, setTrendSelected }){
+export default function TrendingList({ trendlist, setTrendSelected, gotoHashtag }){
+    const navigate = useNavigate();
 
     return (
     <Main>
-        <Title>Hashtag</Title>
+        <Title onClick={() => gotoHashtag()}>Hashtag</Title>
         <Contents>
             {trendlist && trendlist.map(el => {
-                return <Hashtag onClick={() => setTrendSelected(el.id)}># {el.name}</Hashtag>
+                return <Hashtag onClick={() => gotoHashtag(el.name)}># {el.name}</Hashtag>
             })}
         </Contents>
     </Main>);
