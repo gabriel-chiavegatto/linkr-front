@@ -16,9 +16,8 @@ export default function Header() {
     const [logOutBar, setLogoutBar] = useState('none');
     const [arrowDirection, setArrowDirection] = useState('rotate(270deg)')
 
-    const [search, setSearch] = useState("");
+    const {user} = useContext(ConfigContext);
     const picture = user.picture_url || genericPicture;
-    const {imageProfile} = useContext(ConfigContext);
 
     const {setQuest} = useContext(AuthContext);
   

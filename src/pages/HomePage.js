@@ -17,9 +17,6 @@ import { ContainerHome, ThereAreNoPosts, ContainerFeed, Main, Timeline, Feed, Po
 
 function HomePage() {
 
-  const {user} = useContext(ConfigContext)
-  console.log(user)
-  
   const { error, loading, value, request, setError } = useRequest();  
   const [ offsetPosts, setOffsetPost ] = useState();
   
