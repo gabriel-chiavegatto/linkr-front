@@ -15,8 +15,9 @@ export default function Header() {
     const navigate = useNavigate();
     const [logOutBar, setLogoutBar] = useState('none');
     const [arrowDirection, setArrowDirection] = useState('rotate(270deg)')
-    const {imageProfile} = useContext(ConfigContext);
-    const picture = imageProfile || genericPicture;
+
+    const {user} = useContext(ConfigContext);
+    const picture = user.picture_url || genericPicture;
 
     const {setQuest} = useContext(AuthContext);
   

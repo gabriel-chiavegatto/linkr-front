@@ -13,12 +13,10 @@ import HashtagPage from './pages/HashtagPage';
 
 function App() {
   const tokenLocalStorage = localStorage.getItem("session_token")
-  const imageLocalStorage = localStorage.getItem("image");
-  const [token, setToken] = useState(tokenLocalStorage);
-  const [imageProfile, setImageProfile] = useState(imageLocalStorage);
+  const [user, setUser] = useState(JSON.parse(tokenLocalStorage));
 
   return (
-    <ConfigContext.Provider value={{ token, setToken, imageProfile, setImageProfile }}>
+    <ConfigContext.Provider value={{  user, setUser }}>
       <AuthProvider>
         <BrowserRouter>
           <Routes>
