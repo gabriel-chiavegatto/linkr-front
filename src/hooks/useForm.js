@@ -14,6 +14,14 @@ function useForm(type) {
         setError("Preencha com uma senha valida por favor!");
         return false;
       }
+      if(type === 'confirm password'){
+        setError("Preencha com uma confirmação de senha valida por favor!");
+        return false;
+      }
+      if(type === 'username'){
+        setError("Preencha com um username valido por favor!");
+        return false;
+      }
       
     } else {
       setError(null);

@@ -1,21 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-function Button({ loading, request, email, password }) {
+function Button({ loading, request, email, password, children, onClick }) {
   return (
     <ButtonStyle
       disabled={loading}
-      onClick={() =>
-        request(
-          "/sign-in",
-          "post",
-          { email: email.value, password: password.value },
-          {}
-        )
+      onClick={onClick
       }
       stateButton={loading}
     >
-      {loading ? 'loading...' : 'Log in'}
+      <div>{loading ? 'loading...' : children}</div>
     </ButtonStyle>
   );
 }
@@ -32,4 +26,12 @@ const ButtonStyle = styled.button`
   font-weight: bold;
   font-size: 1rem;
   color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+  &:hover{
+    background-color: #0058c4;
+    transition: 0.3s;
+  }
 `;

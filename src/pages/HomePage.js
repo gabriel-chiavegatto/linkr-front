@@ -10,16 +10,20 @@ import SkeletonLoading from "../components/homepage/SkeletonLoading";
 import Title from "../components/Title";
 import useRequest from "../hooks/useRequest";
 import TrendingList from "../components/homepage/TrendingList";
+import ConfigContext from "../configContext";
 import axios from "axios";
 import UserSearched from "../components/userSearched";
 import { ContainerHome, ThereAreNoPosts, ContainerFeed, Main, Timeline, Feed, Posts, Trendings } from '../style/styledFeed'
 
 function HomePage() {
 
-	const { error, loading, value, request, setError } = useRequest();
-	const [offsetPosts, setOffsetPost] = useState();
-	const [trendSelected, setTrendSelected] = useState();
-	const [trendlist, setTrendlist] = useState();
+  const { error, loading, value, request, setError } = useRequest();  
+  const [ offsetPosts, setOffsetPost ] = useState();
+  
+  const [ trendSelected, setTrendSelected ] = useState();
+  const [ trendlist, setTrendlist ] = useState();
+
+  
 	const { quest } = useContext(AuthContext)
 
 	const session_token = localStorage.getItem("session_token")
@@ -27,7 +31,6 @@ function HomePage() {
 	const headers = { authorization: "Bearer " + user.token };
 
 
-	const offset = offsetPosts;
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -72,6 +75,7 @@ function HomePage() {
 						<Timeline>
 							{!trendSelected && <Publish />}
 							<Posts>
+
 								{!value && loading ?
 									<SkeletonLoading /> :
 									(

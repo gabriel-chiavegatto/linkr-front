@@ -24,6 +24,10 @@ const Banner = styled.div`
   background-color: #151515;
   height: 100vh;
   width: 60%;
+  @media (max-width: 600px){
+    height: 175px;
+    width: 100%;
+  }
 `
 
 const Content = styled.span`
@@ -32,6 +36,9 @@ const Content = styled.span`
   font-weight: bold;
   font-size: 2rem;
   margin-bottom: 5px;
+  @media (max-width: 600px){
+    font-size: 1rem;
+  }
 `
 
 const ContainerContent = styled.div`
@@ -39,4 +46,11 @@ const ContainerContent = styled.div`
   flex-direction: column;
   padding-top: 25%;
   padding-left: 20%;
+  @media (max-width: 600px){
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 20px;
+    padding-left: 0%;
+  }
 `
