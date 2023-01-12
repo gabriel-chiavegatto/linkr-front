@@ -27,13 +27,11 @@ export default function HashtagPage() {
         }
 
         request(`/hashtag/${hashtag}`, 'get', {}, { headers });
-        
+
     }, [hashtag]);
-    
-    
-    
+
     console.log("HERE", value)
-    if(error) console.log("REQUEST ERROR", error)
+    if (error) console.log("REQUEST ERROR", error)
     return (
         <ContainerHome>
             <Header />
@@ -78,23 +76,7 @@ export default function HashtagPage() {
             </ContainerFeed>
         </ContainerHome>
     );
-
-
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
 
 const ContainerHome = styled.div`
   background-color: #333333;
