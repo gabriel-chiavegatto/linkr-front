@@ -1,7 +1,7 @@
 
 import styled from "styled-components";
 import { useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ConfigContext from "../configContext";
 
 import Header from "../components/Header";
@@ -19,15 +19,19 @@ import { ContainerHome, ThereAreNoPosts, ContainerFeed, Main, Timeline, Feed, Po
 export default function UserPage() {
 
     const { error, loading, value, request, setError } = useRequest();
+    const navigate = useNavigate();
 
-    const token = JSON.parse(localStorage.getItem("session_token"));
-    const config = { headers: { authorization: "Bearer " + token } };
+    const user = JSON.parse(localStorage.getItem("session_token"));
+    const config = { headers: { authorization: "Bearer " + user.token } };
 
     const { id } = useParams();
     const req = useContext(ConfigContext)
     console.log("req", req)
 
     useEffect(() => {
+        if (!user.token) {
+            navigate('/sign-in')
+        }
         request(`/user/${id}`, "get", {}, config)
     }, [])
 

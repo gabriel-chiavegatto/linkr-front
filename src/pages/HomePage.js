@@ -23,8 +23,8 @@ function HomePage() {
 	const { quest } = useContext(AuthContext)
 
 	const session_token = localStorage.getItem("session_token")
-	const token = JSON.parse(session_token)
-	const headers = { authorization: "Bearer " + token };
+	const user = JSON.parse(session_token)
+	const headers = { authorization: "Bearer " + user.token };
 
 
 	const offset = offsetPosts;
@@ -37,7 +37,7 @@ function HomePage() {
 		// }
 		link += "page=1";
 
-		if (!token) {
+		if (!user.token) {
 			navigate('/sign-in')
 		}
 
@@ -99,10 +99,7 @@ function HomePage() {
 							</Posts>
 						</Timeline>
 						<Trendings>
-							<TrendingList
-								trendlist={trendlist}
-								setTrendSelected={setTrendSelected}
-							/>
+							<TrendingList />
 						</Trendings>
 					</Feed>
 				</Main>
@@ -123,58 +120,3 @@ const DivUsers = styled.div`
 	align-items: center;
 	flex-direction: column;
 `
-
-const ContainerHome = styled.div`
-  background-color: #333333;
-  height: 100%;
-  width: 100%;
-`;
-
-const ThereAreNoPosts = styled.p`
-  font-family: 'Lato';
-  font-size: 1.5rem;
-  color: #fff;
-  margin-top: 20px;
-`
-
-const ContainerError = styled.div`
-  width: 600px;
-  position: fixed;
-  top: 80px;
-  right: 10px;
-  z-index: 1;
-`
-
-
-const ContainerFeed = styled.div`
-  background-color: #333333;
-  height: 100%;
-  width: 100%;
-  padding-top: 5%;
-  box-sizing: border-box;
-	display: flex;
-	justify-content: center;
-
-	`;
-
-const Main = styled.div`
-	width: 75%;
-`;
-
-const Timeline = styled.div`
-	width: 65%;
-
-`;
-
-const Feed = styled.div`
-	display: flex;
-	width: 100%;
-`;
-
-const Posts = styled.div`
-	width: 100%;
-`;
-
-const Trendings = styled.div`
-	width: 35%;
-`;

@@ -18,12 +18,12 @@ export default function HashtagPage() {
     const { error, loading, value, request, setError } = useRequest();
     const navigate = useNavigate();
 
-    const token = JSON.parse(localStorage.getItem("session_token"));
-    const headers = { authorization: "Bearer " + token };
+    const user = JSON.parse(localStorage.getItem("session_token"));
+    const headers = { authorization: "Bearer " + user.token };
 
     useEffect(() => {
 
-        if (!token) {
+        if (!user.token) {
             navigate('/sign-in')
         }
 
