@@ -26,8 +26,8 @@ export default function TrendingList({ trendlist, setTrendSelected, gotoHashtag 
                 {!value && loading ? <Hashtag>LOADING...</Hashtag> :
                     (value?.data.length === 0 ?
                         <Hashtag>There is no hashtags</Hashtag> :
-                        value?.data.map(el => {
-                            return <Hashtag key={el.index} onClick={() => navigate(`/hashtag/${el.name}`)} ># {el.name}</Hashtag>
+                        value?.data.map((el, index) => {
+                            return <Hashtag key={index} onClick={() => navigate(`/hashtag/${el.name}`)} ># {el.name}</Hashtag>
                         }))
                 }
             </Contents>

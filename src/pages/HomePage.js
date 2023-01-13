@@ -44,14 +44,12 @@ function HomePage() {
   }
 
   useEffect(() => {
-	console.log(global.hashtag);
 
 	let link = "/posts?";
 	if(global.hashtag){
 		link += `trending=${global.hashtag}&`;
 	}
 	link += "page=1";
-	console.log(link);
     request(link, "get", {}, { headers });
     
     if(!user.token){
@@ -69,6 +67,8 @@ function HomePage() {
   let getTrendName = () => {
 	return trendlist.find(el => el.id === trendSelected).name;
   }
+
+
   	return (
 		<ContainerHome>
 			<Header />
@@ -88,21 +88,25 @@ function HomePage() {
 					value?.data.length === 0 ? 
 					<ThereAreNoPosts>There Are No Posts</ThereAreNoPosts> :
 					value?.data.map((p, index) => {
+							const addons = (p.is_repost)? {is_repost: p.is_repost, username_repost: p.username_repost}: {};
 							return (
 								<Post
 									key={index}
 									user_id={p.user_id}
-									id={p.id}
+									id={p.post_gid}
 									youLiked={p.youLiked}
 									src={p.picture_url}
-									likes={p.Number_of_likes}
+									likes={p.number_of_likes}
 									username={p.username}
 									description={p.description}
+									commentsCount={p.comments_post}
+									repostsCount={p.reposts_post}
 									descriptionLink={p.descriptionLink}
 									titleLink={p.titleLink}
 									link={p.link}
 									imageLink={p.imageLink}
 									gotoHashtag={gotoHashtag}
+									addOns={addons}
 								/>
 							);
 						})

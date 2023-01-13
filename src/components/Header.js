@@ -13,13 +13,15 @@ import {DebounceInput} from 'react-debounce-input';
 export default function Header() {
 
     const navigate = useNavigate();
+    const [text, setText] = useState();
     const [logOutBar, setLogoutBar] = useState('none');
     const [arrowDirection, setArrowDirection] = useState('rotate(270deg)')
 
-    const user = useContext(ConfigContext);
+    const {user} = useContext(ConfigContext);
+    console.log("header: ", user);
     const picture = user.picture_url || genericPicture;
 
-    const {setQuest} = useContext(AuthContext);
+    const {setQuest, quest} = useContext(AuthContext);
   
 
     function toggleLogoutBar() {
@@ -33,13 +35,13 @@ export default function Header() {
         }
     }
     async function Logout() {
-        const api = process.env.API || 'http://localhost:5000'
+        const api = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000'
         try {
             const session_token = localStorage.getItem("session_token")
             const token = JSON.parse(session_token)
             const config = {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token.token}`
                 }
             }
             await axios.post(`${api}/logout`, {}, config);
@@ -55,7 +57,7 @@ export default function Header() {
     const handleChange = (value => {
 
         
-        const api = process.env.API || 'http://localhost:5000'
+        const api = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000'
 
         const session_token = localStorage.getItem("session_token")
         const token = JSON.parse(session_token)
@@ -64,7 +66,7 @@ export default function Header() {
         if(value.length >= 3){
             const config = {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token.token}`
                 }
             };
     
@@ -73,15 +75,15 @@ export default function Header() {
             }
 
            const promise =  axios.post(`${api}/user`, user, config);
-            promise.then(resp => setQuest(resp.data));
+            promise.then(resp => 
+                {
+                    setQuest(resp.data); 
+                });
             promise.catch((err => {alert(err.response?.data.message)}))
 
         } else {
             setQuest([]);
         }
-        
-
-       
     })
 
     return (
@@ -89,6 +91,7 @@ export default function Header() {
             <Logo size={'49px'} />
             <SeachBox>
                 <DebounceInput
+                    value={text}
                     minLength={3}
                     debounceTimeout={300}
                     placeholder={"Search for people"}

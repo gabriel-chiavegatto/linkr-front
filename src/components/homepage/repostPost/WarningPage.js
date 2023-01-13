@@ -4,39 +4,38 @@ import styled from "styled-components";
 import useRequest from "../../../hooks/useRequest";
 
 
-export function WarningDeletePost({ postId, activeButton, setActiveButton }) {
+export function WarningRepostPost({ postId, activeButton, setActiveButton }) {
 
     const { value, loading, error, request, setError } = useRequest();
 
     const navigate = useNavigate();
     const token = JSON.parse(localStorage.getItem('session_token'))
     const config = {
-        headers: { authorization: `Bearer ${token}` }
+        headers: { authorization: `Bearer ${token.token}` }
     }
     return (
         <WarningContainer>
             <section>
                 <article>
                     <div>
-                        <h1>Are you sure you want to delete this post?</h1>
+                        <h1>Do you want to re-post this link?</h1>
                     </div>
                     <div>
                         <button className="go-back"
                             onClick={() => {
                                 setActiveButton(false);
-                            }} >No, go back</button>
+                            }} >No, cancel</button>
                         <button className="delete"
                             onClick={() => {
-                                const deleteProcess = request(
-                                    `/delete-post/${postId}`,
+                                request(
+                                    `/repost/${postId}`,
                                     "post",
                                     {},
                                     config
                                 )
-                                if (error) { alert("Não foi possivel excluir o post"); setActiveButton(false); }
-                                else { window.location.reload() }
+                                if (error) { alert("Não foi possivel repostar o post"); setActiveButton(false); }
                             }}
-                        >{loading ? <>loading...</> : <>Yes,delete it</>}</button>
+                        >{loading ? <>loading...</> : <>Yes, share!</>}</button>
                     </div>
                 </article>
             </section>
@@ -50,7 +49,7 @@ const WarningContainer = styled.div`
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1;
+    z-index: 99!important;
     display: flex;
     align-items: center;
     justify-content: center;

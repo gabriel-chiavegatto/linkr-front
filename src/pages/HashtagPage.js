@@ -14,7 +14,6 @@ import SkeletonLoading from "../components/homepage/SkeletonLoading";
 export default function HashtagPage() {
 
     const { hashtag } = useParams();
-    console.log('hashtag >>', hashtag);
     const { error, loading, value, request, setError } = useRequest();
     const navigate = useNavigate();
 
@@ -31,7 +30,6 @@ export default function HashtagPage() {
 
     }, [hashtag]);
 
-    console.log("HERE", value)
     if (error) console.log("REQUEST ERROR", error)
     return (
         <ContainerHome>

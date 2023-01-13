@@ -1,6 +1,7 @@
 import { Tooltip } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { AiFillHeart, AiOutlineHeart, AiOutlineComment } from "react-icons/ai";
+import { FaRetweet } from "react-icons/fa";
 import styled from "styled-components";
 import { prepareTooltipMessage } from "../../utils/createMessageTooltip";
 import ImgUser from "../ImgUser";
@@ -11,13 +12,13 @@ import axios from "axios";
 import useRequest from "../../hooks/useRequest";
 import { useNavigate } from "react-router-dom";
 import { TrashButton } from "./deletePost/TrashButton";
+import { RepostButton } from "./repostPost/RepostButton";
 import { EditPostButton } from "./editPost/EditPostButton";
 import Comments from "./Comments";
+
 function Post({
   id,
   src,
-  youLiked,
-  likes,
   username,
   description,
   descriptionLink,
@@ -25,24 +26,28 @@ function Post({
   titleLink,
   link,
   user_id,
-  gotoHashtag
+  gotoHashtag,
+  addOns
 }) {
   const [state_description, setDescription] = React.useState(description);
-  const [liked, setLiked] = React.useState(youLiked);
-  const [likeCount, setLikeCount] = React.useState();
   const [editMode, setEditMode] = React.useState(false);
-  const [commentsSelection, setCommentsSelection] = React.useState(true);
+  
+  const [myUserIdByServer, setMyUserIdByServer] = React.useState();
+  const [likes, setLikes] = React.useState();
+  const [comments, setComments] = React.useState();
+  const [reposts, setReposts] = React.useState();
+
+  const [commentsSelection, setCommentsSelection] = React.useState(false);
   const tagStyle = {
     fontWeight: 700,
   };
   const [storage] = useLocalStorage("session_token");
-  const headers = { authorization: "Bearer " + storage };
+  const headers = { authorization: "Bearer " + storage.token };
   const inputEl = React.useRef(null);
 
   const { error, loading, value, request, setError } = useRequest();
 
   const message = prepareTooltipMessage(value?.data, username, likes)
-  
   
   const navigate = useNavigate()
   const tagClicked = (tag) => {
@@ -58,12 +63,20 @@ function Post({
     if(event.key === 'Enter'){
       setEditMode(false);
       axios
-        .post(`${process.env.REACT_APP_API_BASE_URL}/edit`, {post_id: id, description: state_description}, {headers: {authorization: `Bearer ${storage}`}})
+        .post(`${process.env.REACT_APP_API_BASE_URL}/edit`, {post_id: id, description: state_description}, {headers})
         .then(res => {
           navigate('/timeline');
         })
         .catch(err => console.error(err));
     }
+  }
+  function openComments(){
+    setCommentsSelection(!commentsSelection);
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/comments?post_id=${id}`)
+      .then(res => {
+        setComments(res.data);
+      })
   }
   function startEditMode(){
     setDescription(description);
@@ -73,26 +86,52 @@ function Post({
 
   function doLike(bool){
     axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/like`, { post_id: id, user_id }, {headers: {authorization: `Bearer ${storage}`}})
+      .post(`${process.env.REACT_APP_API_BASE_URL}/like`, { post_id: id, user_id }, {headers})
       .then(res => {
-        setLiked(bool);
-
-        if(youLiked){
-          setLikeCount(Number(likes)-1);
-        }else{
-          setLikeCount(Number(likes)+1);
-        }
+        getPostValueInfos()
       })
       .catch(err => console.error(err));
   } 
+  function getPostValueInfos(){
+    let importer;
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/datainfos/${id}`, {headers})
+      .then(res => {  
+        importer = res.data
+        setMyUserIdByServer(importer.user_id);
+        setComments(importer.comments)
+        setLikes(importer.likes)
+        setReposts(importer.reposts) 
+        console.log(importer);
+      })
+      .catch(err => console.error(err))
+  }
+  function verifyLike(){
+    if(likes){
+      const iLiked = likes.find(el => el.user_id === myUserIdByServer);
+      if(iLiked){
+        return true
+      }
+      return false;
+    }
+  }
+
+  useEffect(()=>{
+    getPostValueInfos();
+  }, []);
 
   return (
     <ContainerPost>
+       {addOns && (addOns.is_repost)? 
+       <>
+        <FaRetweet /> Re-posted by {addOns.username_repost}
+       </>:
+        ""}
       <PostArea>
         <ContainerLikeAndPhoto>
           <ImgUser src={src} />
           <Likes>
-            {liked ? (
+            {verifyLike() ? (
               <AiFillHeart color={"red"} onClick={() => doLike(false)} />
             ) : (
               <AiOutlineHeart onClick={() => doLike(true)} />
@@ -103,15 +142,19 @@ function Post({
               >
             </Tooltip>}
               <CountLikes>
-                {likeCount? likeCount :Number(likes)} likes
+                {likes && likes.reduce( (a, b) => a + 1, 0 )} likes
               </CountLikes>
           </Likes>
           <Likes>
-            <AiOutlineComment /> comments
+            <AiOutlineComment onClick={openComments} /> 
+            <span>{comments && comments.reduce( (a, b) => a + 1 , 0 )} comments</span>
+          </Likes>
+          <Likes>
+            <RepostButton id={id} repostsCount={reposts && reposts.reduce( (a, b) => a + 1, 0 )} />
           </Likes>
         </ContainerLikeAndPhoto>
 
-        <ContainerClickPost href={link} target="_blank">
+        
         <ContainerInfoPost>
           <Username onClick={()=>navigate(`/user/${user_id}`)}>{username}</Username>
           {editMode? 
@@ -124,12 +167,14 @@ function Post({
               <ReactTagify tagStyle={tagStyle} tagClicked={tagClicked}>
                 <Description>{state_description}</Description>
               </ReactTagify>}
+          <ContainerClickPost href={link} target="_blank">
           <LinkPost
             description={descriptionLink}
             image={imageLink}
             title={titleLink}
             link={link}
           />
+          </ContainerClickPost>
           </ContainerInfoPost>
 
 
@@ -137,7 +182,6 @@ function Post({
             <EditPostButton id={id} startEditMode={startEditMode} />
             <TrashButton id={id} />
           </EditPanel>
-        </ContainerClickPost>
       </PostArea>
  
 
@@ -146,6 +190,9 @@ function Post({
           {commentsSelection? 
             <Comments 
               perfilSrc={src}
+              post_id={id}
+              comments={comments}
+              getPostValueInfos={getPostValueInfos}
             />:
             ""
           }
@@ -188,6 +235,7 @@ const ContainerPost = styled.div`
   margin: 1rem 0;
   border-radius: 8px;
   background-color: #171717;
+  color: #eee;
 `;
 
 const ContainerClickPost = styled.a`
