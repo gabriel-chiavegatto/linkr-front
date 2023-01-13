@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-<<<<<<< HEAD
-=======
 import { AuthContext } from "../Auth";
->>>>>>> main
 import { Alert, Skeleton } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
@@ -15,21 +12,13 @@ import useRequest from "../hooks/useRequest";
 import TrendingList from "../components/homepage/TrendingList";
 import ConfigContext from "../configContext";
 import axios from "axios";
-<<<<<<< HEAD
-import ConfigContext from "../configContext";
-=======
 import UserSearched from "../components/userSearched";
 import { ContainerHome, ThereAreNoPosts, ContainerFeed, Main, Timeline, Feed, Posts, Trendings } from '../style/styledFeed'
->>>>>>> main
 
 
-<<<<<<< HEAD
 function HomePage() {
     const global = useContext(ConfigContext);
   const { error, loading, value, request, setError } = useRequest();
-=======
-  const { error, loading, value, request, setError } = useRequest();  
->>>>>>> main
   const [ offsetPosts, setOffsetPost ] = useState();
   
   const [ trendSelected, setTrendSelected ] = useState();
@@ -45,20 +34,6 @@ function HomePage() {
 
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		let link = "/posts?";
-		// if(trendSelected){
-		// 	link += `trending=${trendSelected}&`;
-		// }
-		link += "page=1";
-
-		if (!user.token) {
-			navigate('/sign-in')
-		}
-
-		request(link, "get", {}, { headers });
-
-<<<<<<< HEAD
   function gotoHashtag(id){
 	  global.hashtag = id;
 	  if(id){
@@ -67,6 +42,7 @@ function HomePage() {
 		  navigate(`/timeline`);
 	  }
   }
+
   useEffect(() => {
 	console.log(global.hashtag);
 
@@ -78,7 +54,7 @@ function HomePage() {
 	console.log(link);
     request(link, "get", {}, { headers });
     
-    if(!token){
+    if(!user.token){
       navigate('/sign-in')
     }
 	axios
@@ -94,25 +70,6 @@ function HomePage() {
 	return trendlist.find(el => el.id === trendSelected).name;
   }
   	return (
-=======
-		// axios
-		// 	.get(`${process.env.REACT_APP_API_BASE_URL}/hashtag`)
-		// 	.then(res => {
-		// 		setTrendlist(res.data);
-		// 		console.log(trendlist)
-		// 	})
-		// 	.catch(err => console.error(err));
-
-		// request(`/posts?page=1`, "get", {}, { headers });
-
-	}, [offsetPosts, trendSelected]);
-
-	let getTrendName = () => {
-		return trendlist.find(el => el.id === trendSelected).name;
-	}
-
-	return (
->>>>>>> main
 		<ContainerHome>
 			<Header />
 			<DivUsers>
@@ -125,7 +82,6 @@ function HomePage() {
 						<Timeline>
 							{!trendSelected && <Publish />}
 							<Posts>
-<<<<<<< HEAD
 				{ !value  && loading ? 
 					<SkeletonLoading /> :
 					(
@@ -159,37 +115,6 @@ function HomePage() {
 								setTrendSelected={setTrendSelected} 
 								gotoHashtag={gotoHashtag}
 							/>
-=======
-
-								{!value && loading ?
-									<SkeletonLoading /> :
-									(
-										value?.data.length === 0 ?
-											<ThereAreNoPosts>There Are No Posts</ThereAreNoPosts> :
-											value?.data.map((p) => {
-												return (
-													<Post
-														key={p.index}
-														user_id={p.user_id}
-														id={p.id}
-														youLiked={p.youLiked}
-														src={p.picture_url}
-														likes={p.Number_of_likes}
-														username={p.username}
-														description={p.description}
-														descriptionLink={p.descriptionLink}
-														titleLink={p.titleLink}
-														link={p.link}
-														imageLink={p.imageLink}
-													/>
-												);
-											})
-									)}
-							</Posts>
-						</Timeline>
-						<Trendings>
-							<TrendingList />
->>>>>>> main
 						</Trendings>
 					</Feed>
 				</Main>

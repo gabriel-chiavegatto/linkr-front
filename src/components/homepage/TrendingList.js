@@ -1,32 +1,14 @@
-<<<<<<< HEAD
-import React, {useState, useEffect, useContext} from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import ConfigContext from "../../configContext";
-
-export default function TrendingList({ trendlist, setTrendSelected, gotoHashtag }){
-    const navigate = useNavigate();
-
-    return (
-    <Main>
-        <Title onClick={() => gotoHashtag()}>Hashtag</Title>
-        <Contents>
-            {trendlist && trendlist.map(el => {
-                return <Hashtag onClick={() => gotoHashtag(el.name)}># {el.name}</Hashtag>
-            })}
-        </Contents>
-    </Main>);
-=======
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useRequest from "../../hooks/useRequest.js";
+import ConfigContext from "../../configContext";
 
 
-export default function TrendingList({ trendlist, setTrendSelected }) {
+export default function TrendingList({ trendlist, setTrendSelected, gotoHashtag }) {
 
-    const token = JSON.parse(localStorage.getItem("session_token"));
-    const headers = { authorization: "Bearer " + token };
+    const user = useContext(ConfigContext)
+    const headers = { authorization: "Bearer " + user.token };
     const navigate = useNavigate();
     const { error, loading, value, request, setError } = useRequest();
 
@@ -39,7 +21,7 @@ export default function TrendingList({ trendlist, setTrendSelected }) {
 
     return (
         <Main>
-            <Title>Hashtag</Title>
+            <Title onClick={() => gotoHashtag()}>Hashtag</Title>
             <Contents>
                 {!value && loading ? <Hashtag>LOADING...</Hashtag> :
                     (value?.data.length === 0 ?
@@ -50,7 +32,6 @@ export default function TrendingList({ trendlist, setTrendSelected }) {
                 }
             </Contents>
         </Main>)
->>>>>>> main
 }
 
 const Main = styled.div`

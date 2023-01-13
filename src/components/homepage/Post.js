@@ -40,13 +40,9 @@ function Post({
   const inputEl = React.useRef(null);
 
   const { error, loading, value, request, setError } = useRequest();
-<<<<<<< HEAD
-  const message = prepareTooltipMessage(value?.data, username, likeCount)
-=======
 
   const message = prepareTooltipMessage(value?.data, username, likes)
   
->>>>>>> main
   
   const navigate = useNavigate()
   const tagClicked = (tag) => {
@@ -91,35 +87,34 @@ function Post({
   } 
 
   return (
-      <ContainerPost>
-        <PostArea>
-          <ContainerLikeAndPhoto>
-            <ImgUser src={src} />
-            <Likes>
-              {liked ? (
-                <AiFillHeart color={"red"} onClick={() => doLike(false)} />
-              ) : (
-                <AiOutlineHeart onClick={() => doLike(true)} />
-              )}
-                {value && <Tooltip
-                  title={message}
-                  onMouseEnter={() => request(`/likes-post/${id}`, "get", {}, { headers })}
-                >
-              </Tooltip>}
-                <CountLikes>
-                  {likeCount? likeCount :Number(likes)} likes
-                </CountLikes>
-            </Likes>
-            <Likes>
-              <AiOutlineComment /> comments
-            </Likes>
-          </ContainerLikeAndPhoto>
+    <ContainerPost>
+      <PostArea>
+        <ContainerLikeAndPhoto>
+          <ImgUser src={src} />
+          <Likes>
+            {liked ? (
+              <AiFillHeart color={"red"} onClick={() => doLike(false)} />
+            ) : (
+              <AiOutlineHeart onClick={() => doLike(true)} />
+            )}
+              {value && <Tooltip
+                title={message}
+                onMouseEnter={() => request(`/likes-post/${id}`, "get", {}, { headers })}
+              >
+            </Tooltip>}
+              <CountLikes>
+                {likeCount? likeCount :Number(likes)} likes
+              </CountLikes>
+          </Likes>
+          <Likes>
+            <AiOutlineComment /> comments
+          </Likes>
+        </ContainerLikeAndPhoto>
 
-          <ContainerInfoPost>
-            <Username>{username}</Username>
-
-<<<<<<< HEAD
-            {editMode? 
+        <ContainerClickPost href={link} target="_blank">
+        <ContainerInfoPost>
+          <Username onClick={()=>navigate(`/user/${user_id}`)}>{username}</Username>
+          {editMode? 
               <EditDescription 
                 ref={inputEl} 
                 value={state_description} 
@@ -129,14 +124,12 @@ function Post({
               <ReactTagify tagStyle={tagStyle} tagClicked={tagClicked}>
                 <Description>{state_description}</Description>
               </ReactTagify>}
-          <ContainerClickPost href={link} target="_blank">
-              <LinkPost
-                description={descriptionLink}
-                image={imageLink}
-                title={titleLink}
-                link={link}
-              />
-          </ContainerClickPost>
+          <LinkPost
+            description={descriptionLink}
+            image={imageLink}
+            title={titleLink}
+            link={link}
+          />
           </ContainerInfoPost>
 
 
@@ -144,61 +137,22 @@ function Post({
             <EditPostButton id={id} startEditMode={startEditMode} />
             <TrashButton id={id} />
           </EditPanel>
-        </PostArea>
-        <CommentsArea>
-          <HiddenCommentArea>
-            {commentsSelection? 
-              <Comments 
-                perfilSrc={src}
-              />:
-              ""
-            }
-          </HiddenCommentArea>
-        </CommentsArea>
-      </ContainerPost>
-=======
-    <ContainerPost>
-      <ContainerLikeAndPhoto>
-        <ImgUser src={src} />
-        <Likes>
-          {liked ? (
-            <AiFillHeart color={"red"} onClick={() => setLiked(false)} />
-          ) : (
-            <AiOutlineHeart onClick={() => setLiked(true)} />
-          )}
-            {value && <Tooltip
-              title={message}
-              onMouseEnter={() => request(`/likes-post/${id}`, "get", {}, { headers })}
-            >
-            <CountLikes>
-              {liked ? Number(likes) + 1 : Number(likes)} likes
-            </CountLikes>
-          </Tooltip>}
-        </Likes>
-      </ContainerLikeAndPhoto>
-
-      <ContainerClickPost href={link} target="_blank">
-        <ContainerInfoPost>
-          <Username onClick={()=>navigate(`/user/${user_id}`)}>{username}</Username>
-          <ReactTagify 
-              tagStyle={tagStyle}
-              tagClicked={tagClicked}
-          >
-            <Description>{description}</Description>
-          </ReactTagify>
-          <LinkPost
-            description={descriptionLink}
-            image={imageLink}
-            title={titleLink}
-            link={link}
-          />
-        </ContainerInfoPost>
-      </ContainerClickPost>
+        </ContainerClickPost>
+      </PostArea>
  
 
-      <TrashButton id={id} />
+      <CommentsArea>
+        <HiddenCommentArea>
+          {commentsSelection? 
+            <Comments 
+              perfilSrc={src}
+            />:
+            ""
+          }
+        </HiddenCommentArea>
+      </CommentsArea>
+
     </ContainerPost>
->>>>>>> main
   );
 }
 
