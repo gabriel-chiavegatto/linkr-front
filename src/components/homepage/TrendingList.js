@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useRequest from "../../hooks/useRequest.js";
+import ConfigContext from "../../configContext";
 
 
-export default function TrendingList({ trendlist, setTrendSelected }) {
+export default function TrendingList({ trendlist, setTrendSelected, gotoHashtag }) {
 
-    const token = JSON.parse(localStorage.getItem("session_token"));
-    const headers = { authorization: "Bearer " + token };
+    const user = useContext(ConfigContext)
+    const headers = { authorization: "Bearer " + user.token };
     const navigate = useNavigate();
     const { error, loading, value, request, setError } = useRequest();
 
@@ -20,7 +21,7 @@ export default function TrendingList({ trendlist, setTrendSelected }) {
 
     return (
         <Main>
-            <Title>Hashtag</Title>
+            <Title onClick={() => gotoHashtag()}>Hashtag</Title>
             <Contents>
                 {!value && loading ? <Hashtag>LOADING...</Hashtag> :
                     (value?.data.length === 0 ?

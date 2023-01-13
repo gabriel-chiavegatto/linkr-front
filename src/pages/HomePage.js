@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../Auth";
 import { Alert, Skeleton } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header";
 import Post from "../components/homepage/Post";
@@ -15,9 +15,10 @@ import axios from "axios";
 import UserSearched from "../components/userSearched";
 import { ContainerHome, ThereAreNoPosts, ContainerFeed, Main, Timeline, Feed, Posts, Trendings } from '../style/styledFeed'
 
-function HomePage() {
 
-  const { error, loading, value, request, setError } = useRequest();  
+function HomePage() {
+    const global = useContext(ConfigContext);
+  const { error, loading, value, request, setError } = useRequest();
   const [ offsetPosts, setOffsetPost ] = useState();
   
   const [ trendSelected, setTrendSelected ] = useState();
@@ -33,36 +34,42 @@ function HomePage() {
 
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		let link = "/posts?";
-		// if(trendSelected){
-		// 	link += `trending=${trendSelected}&`;
-		// }
-		link += "page=1";
+  function gotoHashtag(id){
+	  global.hashtag = id;
+	  if(id){
+		  navigate(`/hashtag/${id}`);
+	  }else{
+		  navigate(`/timeline`);
+	  }
+  }
 
-		if (!user.token) {
-			navigate('/sign-in')
-		}
+  useEffect(() => {
+	console.log(global.hashtag);
 
-		request(link, "get", {}, { headers });
-
-		// axios
-		// 	.get(`${process.env.REACT_APP_API_BASE_URL}/hashtag`)
-		// 	.then(res => {
-		// 		setTrendlist(res.data);
-		// 		console.log(trendlist)
-		// 	})
-		// 	.catch(err => console.error(err));
-
-		// request(`/posts?page=1`, "get", {}, { headers });
-
-	}, [offsetPosts, trendSelected]);
-
-	let getTrendName = () => {
-		return trendlist.find(el => el.id === trendSelected).name;
+	let link = "/posts?";
+	if(global.hashtag){
+		link += `trending=${global.hashtag}&`;
 	}
+	link += "page=1";
+	console.log(link);
+    request(link, "get", {}, { headers });
+    
+    if(!user.token){
+      navigate('/sign-in')
+    }
+	axios
+		.get(`${process.env.REACT_APP_API_BASE_URL}/hashtag`)
+		.then(res => {
+			setTrendlist(res.data);
+		})
+		.catch(err => console.error(err));
+    request(link, "get", {}, { headers });
+  }, [offsetPosts, global.hashtag]);
 
-	return (
+  let getTrendName = () => {
+	return trendlist.find(el => el.id === trendSelected).name;
+  }
+  	return (
 		<ContainerHome>
 			<Header />
 			<DivUsers>
@@ -75,35 +82,39 @@ function HomePage() {
 						<Timeline>
 							{!trendSelected && <Publish />}
 							<Posts>
-
-								{!value && loading ?
-									<SkeletonLoading /> :
-									(
-										value?.data.length === 0 ?
-											<ThereAreNoPosts>There Are No Posts</ThereAreNoPosts> :
-											value?.data.map((p) => {
-												return (
-													<Post
-														key={p.index}
-														user_id={p.user_id}
-														id={p.id}
-														youLiked={p.youLiked}
-														src={p.picture_url}
-														likes={p.Number_of_likes}
-														username={p.username}
-														description={p.description}
-														descriptionLink={p.descriptionLink}
-														titleLink={p.titleLink}
-														link={p.link}
-														imageLink={p.imageLink}
-													/>
-												);
-											})
-									)}
+				{ !value  && loading ? 
+					<SkeletonLoading /> :
+					(
+					value?.data.length === 0 ? 
+					<ThereAreNoPosts>There Are No Posts</ThereAreNoPosts> :
+					value?.data.map((p, index) => {
+							return (
+								<Post
+									key={index}
+									user_id={p.user_id}
+									id={p.id}
+									youLiked={p.youLiked}
+									src={p.picture_url}
+									likes={p.Number_of_likes}
+									username={p.username}
+									description={p.description}
+									descriptionLink={p.descriptionLink}
+									titleLink={p.titleLink}
+									link={p.link}
+									imageLink={p.imageLink}
+									gotoHashtag={gotoHashtag}
+								/>
+							);
+						})
+				)}
 							</Posts>
 						</Timeline>
 						<Trendings>
-							<TrendingList />
+							<TrendingList
+								trendlist={trendlist}
+								setTrendSelected={setTrendSelected} 
+								gotoHashtag={gotoHashtag}
+							/>
 						</Trendings>
 					</Feed>
 				</Main>

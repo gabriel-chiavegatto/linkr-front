@@ -28,7 +28,7 @@ function LinkPost({ title, description, link, image }) {
 export default LinkPost;
 
 const ContainerLinkPost = styled.div`
-  height: 70%;
+  height: 100%;
   width: 100%;
   border: 1px solid #c4c4c4;
   border-radius: 16px;

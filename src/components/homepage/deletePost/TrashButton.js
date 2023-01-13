@@ -21,9 +21,6 @@ export function TrashButton({id}) {
 }
 
 const TrashContainer = styled.div`
-    width: 14px;
-    height: 14px;
-    position: absolute;
-    top: 23px;
-    right: 23px;
+    width: 1rem;
+    height: 1rem;
 `;
