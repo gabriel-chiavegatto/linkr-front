@@ -42,49 +42,49 @@ function Post({
   const { error, loading, value, request, setError } = useRequest();
 
   const message = prepareTooltipMessage(value?.data, username, likes)
-  
-  
+
+
   const navigate = useNavigate()
   const tagClicked = (tag) => {
     let hashtag = (tag.split('#'))[1];
     gotoHashtag(hashtag)
   }
 
-  function keyBoardListener(event){
-    if(event.key === 'Escape'){
+  function keyBoardListener(event) {
+    if (event.key === 'Escape') {
       setEditMode(false);
       setDescription(description);
     }
-    if(event.key === 'Enter'){
+    if (event.key === 'Enter') {
       setEditMode(false);
       axios
-        .post(`${process.env.REACT_APP_API_BASE_URL}/edit`, {post_id: id, description: state_description}, {headers: {authorization: `Bearer ${storage}`}})
+        .post(`${process.env.REACT_APP_API_BASE_URL}/edit`, { post_id: id, description: state_description }, { headers: { authorization: `Bearer ${storage}` } })
         .then(res => {
           navigate('/timeline');
         })
         .catch(err => console.error(err));
     }
   }
-  function startEditMode(){
+  function startEditMode() {
     setDescription(description);
     setEditMode(true);
     inputEl.current.focus();
   }
 
-  function doLike(bool){
+  function doLike(bool) {
     axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/like`, { post_id: id, user_id }, {headers: {authorization: `Bearer ${storage}`}})
+      .post(`${process.env.REACT_APP_API_BASE_URL}/like`, { post_id: id, user_id }, { headers: { authorization: `Bearer ${storage}` } })
       .then(res => {
         setLiked(bool);
 
-        if(youLiked){
-          setLikeCount(Number(likes)-1);
-        }else{
-          setLikeCount(Number(likes)+1);
+        if (youLiked) {
+          setLikeCount(Number(likes) - 1);
+        } else {
+          setLikeCount(Number(likes) + 1);
         }
       })
       .catch(err => console.error(err));
-  } 
+  }
 
   return (
     <ContainerPost>
@@ -97,14 +97,14 @@ function Post({
             ) : (
               <AiOutlineHeart onClick={() => doLike(true)} />
             )}
-              {value && <Tooltip
-                title={message}
-                onMouseEnter={() => request(`/likes-post/${id}`, "get", {}, { headers })}
-              >
+            {value && <Tooltip
+              title={message}
+              onMouseEnter={() => request(`/likes-post/${id}`, "get", {}, { headers })}
+            >
             </Tooltip>}
-              <CountLikes>
-                {likeCount? likeCount :Number(likes)} likes
-              </CountLikes>
+            <CountLikes>
+              {likeCount ? likeCount : Number(likes)} likes
+            </CountLikes>
           </Likes>
           <Likes>
             <AiOutlineComment /> comments
@@ -112,24 +112,26 @@ function Post({
         </ContainerLikeAndPhoto>
 
         <ContainerClickPost href={link} target="_blank">
-        <ContainerInfoPost>
-          <Username onClick={()=>navigate(`/user/${user_id}`)}>{username}</Username>
-          {editMode? 
-              <EditDescription 
-                ref={inputEl} 
-                value={state_description} 
+          <ContainerInfoPost>
+            <Username onClick={() => navigate(`/user/${user_id}`)}>{username}</Username>
+            {editMode ?
+              <EditDescription
+                ref={inputEl}
+                value={state_description}
                 onChange={e => setDescription(e.target.value)}
                 onKeyUp={e => keyBoardListener(e)}
-              />:
-              <ReactTagify tagStyle={tagStyle} tagClicked={tagClicked}>
-                <Description>{state_description}</Description>
-              </ReactTagify>}
-          <LinkPost
-            description={descriptionLink}
-            image={imageLink}
-            title={titleLink}
-            link={link}
-          />
+              /> :
+              <div>
+                <ReactTagify tagStyle={tagStyle} tagClicked={tagClicked}>
+                  <Description>{state_description}</Description>
+                </ReactTagify>
+              </div>}
+            <LinkPost
+              description={descriptionLink}
+              image={imageLink}
+              title={titleLink}
+              link={link}
+            />
           </ContainerInfoPost>
 
 
@@ -139,14 +141,14 @@ function Post({
           </EditPanel>
         </ContainerClickPost>
       </PostArea>
- 
+
 
       <CommentsArea>
         <HiddenCommentArea>
-          {commentsSelection? 
-            <Comments 
+          {commentsSelection ?
+            <Comments
               perfilSrc={src}
-            />:
+            /> :
             ""
           }
         </HiddenCommentArea>

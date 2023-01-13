@@ -26,7 +26,7 @@ export default function UserPage() {
 
     const { id } = useParams();
     const req = useContext(ConfigContext)
-    console.log("req", req)
+    // console.log("req", req)
 
     useEffect(() => {
         if (!user.token) {
@@ -35,7 +35,7 @@ export default function UserPage() {
         request(`/user/${id}`, "get", {}, config)
     }, [])
 
-    console.log("HERE", value)
+    // console.log("HERE", value)
     if (error) console.log("REQUEST ERROR", error)
 
     return (
