@@ -19,6 +19,8 @@ export default function SignUp() {
   const [habilit, setHabilit] = useState(false);
   const [disabled, setDisabled] = useState(false);
 
+  console.log(picture_url)
+
   let navigate = useNavigate();
 
 
@@ -29,11 +31,11 @@ export default function SignUp() {
     setDisabled(true);
 
     const registration = {
-      username,
-      email,
-      password,
-      confirmPassword,
-      picture_url,
+      username: username.value,
+      email: email.value,
+      password: password.value,
+      confirmPassword: confirmPassword.value,
+      picture_url: picture_url.value,
     };
 
     const promise = axios.post(
@@ -49,6 +51,7 @@ export default function SignUp() {
     });
 
     promise.catch((err) => {
+      console.log(err)
       if(err?.response.data.message){
         alert(err.response.data.message);
       }else{
@@ -68,7 +71,7 @@ export default function SignUp() {
             <Input disabled={disabled} placeholder={"Password"} {...password} password={true} type={"password"}/>
             <Input disabled={disabled} placeholder={"Confirm Password"} {...confirmPassword} password={true} type={"password"}/>
             <Input disabled={disabled} placeholder={"Username"} {...username}/>
-            <Input disabled={disabled} placeholder={"Picture URL"}/>
+            <Input disabled={disabled} placeholder={"Picture URL"} {...picture_url}/>
             <Button disabled={disabled} onClick={signUp}>{habilit? <ThreeDots color="#ffffff" width={100} height={50}/> :  "Sign Up"}</Button>
         </Form>
         <Link to={"/"}>

@@ -18,7 +18,7 @@ export default function Header() {
     const [arrowDirection, setArrowDirection] = useState('rotate(270deg)')
 
     const {user} = useContext(ConfigContext);
-    console.log("header: ", user);
+
     const picture = user.picture_url || genericPicture;
 
     const {setQuest, quest} = useContext(AuthContext);
@@ -26,7 +26,8 @@ export default function Header() {
 
     function toggleLogoutBar() {
         if (logOutBar === 'none') {
-            console.log('try')
+            
+            ('try')
             setLogoutBar('block');
             setArrowDirection('rotate(180deg)')
         } else {
@@ -60,7 +61,7 @@ export default function Header() {
         const api = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000'
 
         const session_token = localStorage.getItem("session_token")
-        const token = JSON.parse(session_token)
+        const {token} = JSON.parse(session_token)
         
 
         if(value.length >= 3){
@@ -75,11 +76,10 @@ export default function Header() {
             }
 
            const promise =  axios.post(`${api}/user`, user, config);
-            promise.then(resp => 
-                {
-                    setQuest(resp.data); 
-                });
-            promise.catch((err => {alert(err.response?.data.message)}))
+
+            promise.then(resp => setQuest(resp.data));
+            promise.catch((err => {alert(err.response?.data.message)
+            console.log(err)}))
 
         } else {
             setQuest([]);
