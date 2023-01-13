@@ -14,7 +14,6 @@ import HashtagPage from './pages/HashtagPage';
 function App() {
   const tokenLocalStorage = localStorage.getItem("session_token")
   const [user, setUser] = useState(JSON.parse(tokenLocalStorage));
-
   return (
     <ConfigContext.Provider value={{  user, setUser }}>
       <AuthProvider>

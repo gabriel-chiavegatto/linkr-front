@@ -1,36 +1,43 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import ImgUser from "../ImgUser";
 import {FiSend} from "react-icons/fi";
 import Comment from './commentPost/Comment';
+import ConfigContext from '../../configContext';
 
-export default function Comments({perfilSrc}){
-    
+export default function Comments({perfilSrc, post_id, comments, getPostValueInfos}){
+    const [text, setText] = useState();
+    const global = useContext(ConfigContext);
+    function sendMessage(){
+        if(text !== '')
+        axios
+            .post(`${process.env.REACT_APP_API_BASE_URL}/comment`, {post_id, text}, {headers:{authorization: global.user.token }})
+            .then(res => {
+                getPostValueInfos()
+            })
+    }
     return(
         <Main>
             <CommentsList>
-                <Comment 
-                    user_id={2}
-                    username={"Titanzinho"}
-                    pic_url={perfilSrc}
-                    isFollower={true}
-                    isOwner={false}
-                    text={"o melhor do mundo"}
-                />
-                <Comment 
-                    user_id={2}
-                    username={"Titanico"}
-                    pic_url={perfilSrc}
-                    isFollower={true}
-                    isOwner={true}
-                    text={"lionel messi"}
-                />
+                {comments? comments.map((el, index) =>{
+
+                   return (<Comment 
+                        key={index}
+                        user_id={el.user_id}
+                        username={el.username}
+                        pic_url={el.picture_url}
+                        isFollower={false}
+                        isOwner={false}
+                        text={el.text}
+                    />);
+                }): ""}
+                
             </CommentsList>
             <Send>
                 <ImgUser src={perfilSrc} alt="perfil" size="32px" />
-                <Forms type="text" placeholder='write a comment...'/>
-                <FiSend />
+                <Forms type="text" placeholder='write a comment...' value={text} onChange={e => setText(e.target.value)} />
+                <FiSend onKeyUp={sendMessage} onClick={sendMessage} />
             </Send>
         </Main>
     )

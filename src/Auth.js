@@ -5,7 +5,6 @@ export const AuthContext = createContext({});
 function AuthProvider({children}){
 
     const [quest, setQuest] = useState([]);
-    console.log("testee",quest)
         
     return (
         <AuthContext.Provider value={{quest, setQuest}}>

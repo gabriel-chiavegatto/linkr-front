@@ -10,13 +10,11 @@ export default function Redirect(){
     const [storage] = useLocalStorage("session_token");
     
     useEffect(() => {
-        console.log(storage);
         if(storage){
             axios
                 .post(`${process.env.REACT_APP_API_BASE_URL}/session`, {session_token: storage.token})
                 .then(res => {
                     navigate("/timeline")
-                    console.log(res)
                 })
                 .catch(err => {
                     console.error(err)

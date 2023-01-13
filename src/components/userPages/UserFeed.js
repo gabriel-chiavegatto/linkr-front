@@ -15,14 +15,11 @@ export function UserFeed() {
     const config = { headers: { authorization: "Bearer " + token } };
     const { id } = useParams();
     const req = useContext(ConfigContext)
-    console.log("req",req)
     const { error, loading, value, request, setError } = useRequest();
     useEffect(() => {
-        console.log("try request")
         request(`/user/${id}`, "get", {}, config)
     }, [])
 
-    console.log('value', value, error)
     return (
         <Container>
             <Main>
