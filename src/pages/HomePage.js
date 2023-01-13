@@ -44,7 +44,7 @@ function HomePage() {
   }
 
   useEffect(() => {
-	console.log(global.hashtag);
+	console.log(global);
 
 	let link = "/posts?";
 	if(global.hashtag){

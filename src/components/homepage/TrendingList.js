@@ -51,6 +51,7 @@ const Hashtag = styled.div`
     font-size: 1.1rem;
     color: #fff;
     padding: .3rem 1rem;
+    cursor: pointer;
 `;
 const Title = styled.div`
     display: flex;

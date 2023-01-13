@@ -23,9 +23,7 @@ export function WarningDeletePost({ postId, activeButton, setActiveButton }) {
                     <div>
                         <button className="go-back"
                             onClick={() => {
-                                console.log('try');
                                 setActiveButton(false);
-                                console.log(activeButton)
                             }} >No, go back</button>
                         <button className="delete"
                             onClick={() => {

@@ -19,4 +19,5 @@ const Linkr = styled.h1`
   font-weight: bold;
   font-size: ${props => props.size};
   letter-spacing: 0.05em;
+  cursor: pointer;
 `
