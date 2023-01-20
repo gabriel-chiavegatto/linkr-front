@@ -23,7 +23,7 @@ export default function Redirect(){
             navigate("/sign-in")
         }
     }, []);
-    return(<Bg></Bg>);
+    return(<Bg>521 Web server is Down</Bg>);
 }
 
 const Bg = styled.div`

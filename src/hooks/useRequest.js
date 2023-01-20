@@ -1,11 +1,11 @@
 import axios from "axios";
 import React from "react";
-import { API } from "../API";
 
 function useRequest() {
   const [value, setValue] = React.useState(null);
   const [error, setError] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+  const API = process.env.REACT_APP_API_BASE_URL
 
   const request = React.useCallback(async (route, method, body, config) => {
     try {

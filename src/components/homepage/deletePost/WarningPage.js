@@ -1,18 +1,19 @@
-import { useState } from "react";
+import axios from "axios";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useRequest from "../../../hooks/useRequest";
+import ConfigContext from "../../../configContext";
 
 
 export function WarningDeletePost({ postId, activeButton, setActiveButton }) {
 
     const { value, loading, error, request, setError } = useRequest();
-
+    const api = process.env.REACT_APP_API_BASE_URL;
     const navigate = useNavigate();
-    const token = JSON.parse(localStorage.getItem('session_token'))
-    const config = {
-        headers: { authorization: `Bearer ${token}` }
-    }
+    const {user} = useContext(ConfigContext)
+    console.log(user)
+    const config = { headers: { authorization: `Bearer ${user.token}` }}
     return (
         <WarningContainer>
             <section>
@@ -27,14 +28,12 @@ export function WarningDeletePost({ postId, activeButton, setActiveButton }) {
                             }} >No, go back</button>
                         <button className="delete"
                             onClick={() => {
-                                const deleteProcess = request(
-                                    `/delete-post/${postId}`,
-                                    "post",
-                                    {},
-                                    config
-                                )
-                                if (error) { alert("Não foi possivel excluir o post"); setActiveButton(false); }
-                                else { window.location.reload() }
+                                const promise = axios.post(`${api}/delete-post/${postId}`, {}, config)
+                                promise.then(()=>{ window.location.reload() });
+                                promise.catch(()=>{
+                                    alert("Não foi possivel excluir o post"); setActiveButton(false);
+                                })
+                                alert("good")
                             }}
                         >{loading ? <>loading...</> : <>Yes,delete it</>}</button>
                     </div>
