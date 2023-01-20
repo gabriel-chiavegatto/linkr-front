@@ -51,7 +51,7 @@ export default function SignUp() {
     });
 
     promise.catch((err) => {
-      console.log(err)
+      console.log('erro' , err)
       if(err?.response.data.message){
         alert(err.response.data.message);
       }else{

@@ -8,7 +8,7 @@ import Logo from './Logo';
 import axios from "axios";
 import ConfigContext from '../configContext';
 import React from 'react';
-import {DebounceInput} from 'react-debounce-input';
+import { DebounceInput } from 'react-debounce-input';
 
 export default function Header() {
 
@@ -17,17 +17,16 @@ export default function Header() {
     const [logOutBar, setLogoutBar] = useState('none');
     const [arrowDirection, setArrowDirection] = useState('rotate(270deg)')
 
-    const {user} = useContext(ConfigContext);
+    const { user } = useContext(ConfigContext);
+    if (!user) navigate('/')
 
-    const picture = user.picture_url || genericPicture;
+    const picture = user?.picture_url || genericPicture;
 
     const {setQuest, quest} = useContext(AuthContext);
   
 
     function toggleLogoutBar() {
         if (logOutBar === 'none') {
-            
-            ('try')
             setLogoutBar('block');
             setArrowDirection('rotate(180deg)')
         } else {
@@ -78,8 +77,10 @@ export default function Header() {
            const promise =  axios.post(`${api}/user`, user, config);
 
             promise.then(resp => setQuest(resp.data));
-            promise.catch((err => {alert(err.response?.data.message)
-            console.log(err)}))
+            promise.catch((err => {
+                alert(err.response?.data.message)
+                console.log(err)
+            }))
 
         } else {
             setQuest([]);
@@ -95,8 +96,8 @@ export default function Header() {
                     minLength={3}
                     debounceTimeout={300}
                     placeholder={"Search for people"}
-                    onChange={ event => handleChange(event.target.value)}
-                />               
+                    onChange={event => handleChange(event.target.value)}
+                />
             </SeachBox>
             <Menu onClick={toggleLogoutBar} >
                 <img className='arrow' src={arrow} alt='people' />

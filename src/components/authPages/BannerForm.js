@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useForm from "../../hooks/useForm";
@@ -7,6 +7,7 @@ import useRequest from "../../hooks/useRequest";
 import Button from "../form/Button";
 import Form from "../form/Form";
 import Input from "../form/Input";
+import ConfigContext from '../../configContext'
 
 function BannerForm() {
   const email = useForm("email");
@@ -14,6 +15,7 @@ function BannerForm() {
   const { error, loading, value, request, setError } = useRequest();
   const [storage, setStorage] = useLocalStorage("session_token");
   const navigate = useNavigate();
+  const context = useContext(ConfigContext)
 
   useEffect(() => {
     if (value) {
@@ -22,6 +24,7 @@ function BannerForm() {
   }, [value]);
 
   if (value?.data && !error) {
+    context.setUser(value.data)
     navigate("/timeline");
   }
 

@@ -17,25 +17,22 @@ import { ContainerHome, ThereAreNoPosts, ContainerFeed, Main, Timeline, Feed, Po
 
 
 function HomePage() {
-    const global = useContext(ConfigContext);
+	const navigate = useNavigate();
+    const context = useContext(ConfigContext);
   const { error, loading, value, request, setError } = useRequest();
   const [ offsetPosts, setOffsetPost ] = useState();
   
   const [ trendSelected, setTrendSelected ] = useState();
   const [ trendlist, setTrendlist ] = useState();
-
   
 	const { quest } = useContext(AuthContext)
 
-	const session_token = localStorage.getItem("session_token")
-	const user = JSON.parse(session_token)
-	const headers = { authorization: "Bearer " + user.token };
+	if(!context.user)navigate('/sign-in')
 
-
-	const navigate = useNavigate();
+	const headers = { authorization: "Bearer " + context.user?.token };
 
   function gotoHashtag(id){
-	  global.hashtag = id;
+	  context.hashtag = id;
 	  if(id){
 		  navigate(`/hashtag/${id}`);
 	  }else{
@@ -46,15 +43,13 @@ function HomePage() {
   useEffect(() => {
 
 	let link = "/posts?";
-	if(global.hashtag){
-		link += `trending=${global.hashtag}&`;
+	if(context.hashtag){
+		link += `trending=${context.hashtag}&`;
 	}
 	link += "page=1";
     request(link, "get", {}, { headers });
     
-    if(!user.token){
-      navigate('/sign-in')
-    }
+    
 	axios
 		.get(`${process.env.REACT_APP_API_BASE_URL}/hashtag`)
 		.then(res => {
@@ -62,7 +57,7 @@ function HomePage() {
 		})
 		.catch(err => console.error(err));
     request(link, "get", {}, { headers });
-  }, [offsetPosts, global.hashtag]);
+  }, [offsetPosts, context.hashtag]);
 
   let getTrendName = () => {
 	return trendlist.find(el => el.id === trendSelected).name;

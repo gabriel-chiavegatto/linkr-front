@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import userImage from "../../assets/lula.jpg";
 import ConfigContext from "../../configContext";
@@ -6,12 +7,14 @@ import useRequest from "../../hooks/useRequest";
 import ImgUser from '../ImgUser'
 
 function Publish() {
+  const navigate = useNavigate()
   const [link, setLink] = React.useState("");
   const [description, setDescription] = React.useState("");
   const { error, loading, value, request, setError } = useRequest();
 
   const {user} = useContext(ConfigContext);
-  const headers = { authorization: "Bearer " + user.token };
+  if(!user){navigate('/')}
+  const headers = { authorization: "Bearer " + user?.token };
 
 
   if (error) {
@@ -34,7 +37,7 @@ function Publish() {
   return (
     <ContainerPublish>
       <ContainerUserPhoto>
-        <ImgUser src={user.picture_url ?? userImage} />
+        <ImgUser src={user?.picture_url ?? userImage} />
       </ContainerUserPhoto>
       <PublishBox>
         <MessagePublish>What are you going to share today?</MessagePublish>
